@@ -1,0 +1,160 @@
+﻿@model ASPTest.Models.RequestApproval
+@{
+    // Layout = null;
+    ViewData["Title"] = "Approval";
+
+}
+
+@*<h2>Index</h2>
+
+    <p>Hello from our View Template!</p>*@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Button Styles </title>
+    @*<meta name="description" content="Creative Button Styles  - Modern and subtle styles &amp; effects for buttons" />
+        <meta name="keywords" content="button styles, css3, modern, flat button, subtle, effects, hover, web design" />
+        <meta name="author" content="Codrops" />*@
+    @*<link rel="shortcut icon" href="../favicon.ico">*@
+    <link rel="stylesheet" type="text/css" href="~/css/default.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/component.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/cssreset.css" />
+    @*<script src="js/modernizr.custom.js"></script>*@
+</head>
+<body>
+    <div class="container">
+
+        <section class="color-8">
+
+            <br />
+            @*<p class="perspective">
+                    <button class="btn btn-8 btn-8g" type="button" id="btnApprove">Approve</button>
+                </p>*@
+            @*<p style="color:black">Note @Model.Note</p>*@
+
+
+
+
+
+
+
+
+
+            @using (Html.BeginForm("Approval", "Home", FormMethod.Post))
+            {
+                <p class="perspective">
+                    <table style="margin:auto">
+                        <thead style="background-color:cornflowerblue">
+                            <tr>
+                                <th><label style="color:black">ID</label></th>
+                                <th><label style="color:black">Change Type</label></th>
+                                <th><label style="color:black">Note</label></th>
+                                <th><label style="color:black">Item Description</label></th>
+                            </tr>
+                        </thead>
+                        <tbody style="color:black">
+                            <tr>
+                                @*<td> @Html.TextBoxFor(m => m.GUID, new Dictionary<string, object> { { "readonly", "readonly" } })</td>*@
+                                @*<td> @Html.TextBoxFor(m => m.Type, new Dictionary<string, object> { { "readonly", "readonly" } })</td>
+        <td> @Html.TextBoxFor(m => m.Note, new Dictionary<string, object> { { "readonly", "readonly" } })</td>
+        <td> @Html.TextBoxFor(m => m.SibiRequestItemInfo.Description, new Dictionary<string, object> { { "readonly", "readonly" } })</td>*@
+                                <td>@Html.ValueFor(m => m.GUID)</td>
+                                <td>@Html.ValueFor(m => m.Type) </td>
+                                <td>@Html.ValueFor(m => m.Note) </td>
+                                <td>@Html.ValueFor(m => m.SibiRequestItemInfo.Description)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </p>
+                @*<label style="color:black">Note</label>
+                    @Html.TextBoxFor(m => m.Note)
+                    <label style="color:black">ID</label>
+                    @Html.TextBoxFor(m => m.RequestID)*@
+                @Html.HiddenFor(m => m.Note)
+                @Html.HiddenFor(m => m.GUID)
+                @Html.HiddenFor(m => m.PostSuccess)
+
+                <p class="perspective">
+                    <button class="btn btn-8 btn-8g" name="accept" value="true" type="submit" id="btnApprove">Approve</button>
+                    @*<button class="btn btn-8 btn-8g" name="accept" value="true" type="submit" id="btnApprove">Approve</button>*@
+
+                </p>
+
+            }
+
+
+
+
+        </section>
+    </div><!-- /container -->
+
+    <script src="~/js/classie.js"></script>
+    <script>
+
+        function setstate(suc, btn) {
+            var self = this, activatedClass = 'btn-activated';
+
+
+            if (suc) {
+                activatedClass = 'btn-success3d';
+                console.log(btn);
+                if (!classie.has(btn, activatedClass)) {
+                    //classie.add(btn, activatedClass);
+                    setTimeout(function () {
+                        classie.add(btn, activatedClass);
+                    }, 250);
+                    setTimeout(function () {
+                        btn.textContent = "APPROVED!";
+                        classie.remove(btn, activatedClass);
+                    }, 2000);
+
+                }
+            }
+            else {
+                activatedClass = "btn-error3d";
+                if (!classie.has(btn, activatedClass)) {
+                    //classie.add(btn, activatedClass);
+                    setTimeout(function () {
+                        classie.add(btn, activatedClass);
+                    }, 250);
+                    //setTimeout(function () {
+                    //    btn.textContent = "ERROR!";
+                    //    classie.remove(btn, activatedClass);
+                    //}, 2000);
+
+                }
+
+            }
+        }
+
+    </script>
+
+    <script> console.log('@ViewData["state"].ToString()');</script>
+
+    @if (ViewData["state"].ToString() == "posted")
+    {
+        @if (Model.PostSuccess)
+        {
+            <script>
+                var btn = document.getElementById('btnApprove')
+
+                setstate(true, btn);
+            </script>
+
+        }
+        else
+        {
+
+            <script>
+                var btn = document.getElementById('btnApprove')
+                setstate(false, btn);
+            </script>
+        }
+    }
+
+</body>
+</html>
+
