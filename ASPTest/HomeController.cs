@@ -41,18 +41,26 @@ namespace ASPTest
         }
 
         [HttpPost]
-        public ActionResult Approval(Models.RequestApproval r, string accept)
+        public ActionResult Approval(Models.RequestApproval r, string response)
         {
-            Console.WriteLine("Approve CLicked!  " + accept);
+            Console.WriteLine("Approve CLicked!  " + response);
             ViewData["state"] = "posted";
-            //Do the actual approval logic.
-            // MySQLCommsOLD sqlContext = HttpContext.RequestServices.GetService(typeof(MySQLCommsOLD)) as MySQLCommsOLD;
+            ViewData["response"] = response;
 
-            DBFunctions.PopRequestData(ref r);
-            bool success = DBFunctions.ApproveRequest(r);//sqlContext.ApproveRequest(r.GUID);
-            r.PostSuccess = success;
-
-
+            if (response == "accept")
+            {
+                DBFunctions.PopRequestData(ref r);
+                bool success = DBFunctions.ApproveRequest(r);//sqlContext.ApproveRequest(r.GUID);
+                r.PostSuccess = success;
+                return View(r);
+            }
+            else if (response == "reject")
+            {
+                DBFunctions.PopRequestData(ref r);
+                bool success = DBFunctions.RejectRequest(r);//sqlContext.ApproveRequest(r.GUID);
+                r.PostSuccess = success;
+                return View(r);
+            }
             return View(r);
 
         }

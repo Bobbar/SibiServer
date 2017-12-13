@@ -45,7 +45,7 @@
 
             @using (Html.BeginForm("Approval", "Home", FormMethod.Post))
             {
-                <p class="perspective">
+                <section>
                     <table style="margin:auto">
                         <thead style="background-color:cornflowerblue">
                             <tr>
@@ -57,10 +57,6 @@
                         </thead>
                         <tbody style="color:black">
                             <tr>
-                                @*<td> @Html.TextBoxFor(m => m.GUID, new Dictionary<string, object> { { "readonly", "readonly" } })</td>*@
-                                @*<td> @Html.TextBoxFor(m => m.Type, new Dictionary<string, object> { { "readonly", "readonly" } })</td>
-        <td> @Html.TextBoxFor(m => m.Note, new Dictionary<string, object> { { "readonly", "readonly" } })</td>
-        <td> @Html.TextBoxFor(m => m.SibiRequestItemInfo.Description, new Dictionary<string, object> { { "readonly", "readonly" } })</td>*@
                                 <td>@Html.ValueFor(m => m.GUID)</td>
                                 <td>@Html.ValueFor(m => m.Type) </td>
                                 <td>@Html.ValueFor(m => m.Note) </td>
@@ -68,21 +64,27 @@
                             </tr>
                         </tbody>
                     </table>
-                </p>
-                @*<label style="color:black">Note</label>
-                    @Html.TextBoxFor(m => m.Note)
-                    <label style="color:black">ID</label>
-                    @Html.TextBoxFor(m => m.RequestID)*@
+                </section>
                 @Html.HiddenFor(m => m.Note)
                 @Html.HiddenFor(m => m.GUID)
                 @Html.HiddenFor(m => m.PostSuccess)
 
-                <p class="perspective">
-                    <button class="btn btn-8 btn-8g" name="accept" value="true" type="submit" id="btnApprove">Approve</button>
-                    @*<button class="btn btn-8 btn-8g" name="accept" value="true" type="submit" id="btnApprove">Approve</button>*@
+                <section>
+                    <p class="perspective">
+                        <button class="btn btn-8 btn-8g" style="background-color:#b2ffb4;color:#565656" name="response" value="accept" type="submit" id="btnApprove">Accept</button>
 
-                </p>
+                    </p>
+                    <p class="perspective">
+                        <button class="btn btn-8 btn-8g" style="background-color:#ffb2b2;color:#565656" name="response" value="reject" type="submit" id="btnReject">Reject</button>
+                    </p>
 
+                </section>
+                <section>
+                    <p>
+                        <label id="lblStatus" style="color:black"></label>
+                    </p>
+
+                </section>
             }
 
 
@@ -106,10 +108,10 @@
                     setTimeout(function () {
                         classie.add(btn, activatedClass);
                     }, 250);
-                    setTimeout(function () {
-                        btn.textContent = "APPROVED!";
-                        classie.remove(btn, activatedClass);
-                    }, 2000);
+                    //setTimeout(function () {
+                    //    btn.textContent = "SUCCESS!";
+                    //    classie.remove(btn, activatedClass);
+                    //}, 2000);
 
                 }
             }
@@ -124,7 +126,7 @@
                     //    btn.textContent = "ERROR!";
                     //    classie.remove(btn, activatedClass);
                     //}, 2000);
-
+                    document.getElementById('lblStatus').textContent = "Result: ERROR"
                 }
 
             }
@@ -136,11 +138,32 @@
 
     @if (ViewData["state"].ToString() == "posted")
     {
-        @if (Model.PostSuccess)
+        @if (ViewData["response"].ToString() == "accept")
         {
             <script>
                 var btn = document.getElementById('btnApprove')
+                //   document.getElementById('btnReject').style.display = 'none';
+                document.getElementById('lblStatus').textContent = "Result: Accepted"
+            </script>
 
+        }
+        else if (ViewData["response"].ToString() == "reject")
+        {
+
+            <script>
+                var btn = document.getElementById('btnReject')
+                // document.getElementById('btnApprove').style.display = 'none';
+                document.getElementById('lblStatus').textContent = "Result: Rejected"
+            </script>
+        }
+
+
+        @if (Model.PostSuccess)
+        {
+
+
+            <script>
+                // var btn = document.getElementById('btnApprove')
                 setstate(true, btn);
             </script>
 
@@ -149,7 +172,7 @@
         {
 
             <script>
-                var btn = document.getElementById('btnApprove')
+                // var btn = document.getElementById('btnApprove')
                 setstate(false, btn);
             </script>
         }

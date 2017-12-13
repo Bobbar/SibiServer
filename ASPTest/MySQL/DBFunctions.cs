@@ -19,12 +19,35 @@ namespace ASPTest
         {
             bool isApproved = false;
 
-            int appVal = Convert.ToInt32(DBFactory.GetDatabase().ExecuteScalarFromQueryString("SELECT approval_status FROM " + request.TableName + " WHERE uid ='" + request.GUID + "'"));
-            isApproved = Convert.ToBoolean(appVal);
+            var appVal = Convert.ToString(DBFactory.GetDatabase().ExecuteScalarFromQueryString("SELECT approval_status FROM " + request.TableName + " WHERE uid ='" + request.GUID + "'"));
+            isApproved = (appVal == "accept");//Convert.ToBoolean(appVal);
 
             if (!isApproved)
             {
-                var approveQry = "UPDATE " + request.TableName + " SET approval_status ='1' WHERE uid ='" + request.GUID + "'";
+                var approveQry = "UPDATE " + request.TableName + " SET approval_status ='accept' WHERE uid ='" + request.GUID + "'";
+                int affectedRows = DBFactory.GetDatabase().ExecuteQuery(approveQry);
+                // If the command returned affected rows, return true for a success.
+                if (affectedRows > 0)
+                {
+                    return true;
+                }
+
+            }
+            // The request is already approved or no rows were affected, return false for error.
+            return false;
+
+        }
+
+        public static bool RejectRequest(Models.RequestApproval request)
+        {
+            bool isRejected = false;
+
+            var appVal = Convert.ToString(DBFactory.GetDatabase().ExecuteScalarFromQueryString("SELECT approval_status FROM " + request.TableName + " WHERE uid ='" + request.GUID + "'"));
+            isRejected = (appVal == "reject");//Convert.ToBoolean(appVal);
+
+            if (!isRejected)
+            {
+                var approveQry = "UPDATE " + request.TableName + " SET approval_status ='reject' WHERE uid ='" + request.GUID + "'";
                 int affectedRows = DBFactory.GetDatabase().ExecuteQuery(approveQry);
                 // If the command returned affected rows, return true for a success.
                 if (affectedRows > 0)

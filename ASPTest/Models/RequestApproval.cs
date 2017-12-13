@@ -17,6 +17,13 @@ namespace ASPTest.Models
         public string Type { get; set; }
         [DataColumnName("requestor_name")]
         public string RequestorName { get; set; }
+
+        [DataColumnName("approval_sent")]
+        public bool ApprovalSent { get; set; }
+
+        [DataColumnName("approval_status")]
+        public string ApprovalStatus { get; set; }
+
         [DataColumnName("sibi_request_item_uid")]
         public string SibiRequestItemUID { get; set; }
 
@@ -32,7 +39,10 @@ namespace ASPTest.Models
         public RequestApproval(DataTable data) : base(data)
         {
         }
-        
+
+        public RequestApproval(DataRow row) : base(row)
+        {
+        }
         public RequestApproval()
         {
             this.GUID = string.Empty;
