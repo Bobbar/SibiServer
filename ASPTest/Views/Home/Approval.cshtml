@@ -14,14 +14,14 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creative Button Styles </title>
+    <title>Change Approval </title>
     @*<meta name="description" content="Creative Button Styles  - Modern and subtle styles &amp; effects for buttons" />
         <meta name="keywords" content="button styles, css3, modern, flat button, subtle, effects, hover, web design" />
         <meta name="author" content="Codrops" />*@
     @*<link rel="shortcut icon" href="../favicon.ico">*@
     <link rel="stylesheet" type="text/css" href="~/css/default.css" />
     <link rel="stylesheet" type="text/css" href="~/css/component.css" />
-    <link rel="stylesheet" type="text/css" href="~/css/cssreset.css" />
+    @*<link rel="stylesheet" type="text/css" href="~/css/cssreset.css" />*@
     @*<script src="js/modernizr.custom.js"></script>*@
 </head>
 <body>
@@ -46,22 +46,75 @@
             @using (Html.BeginForm("Approval", "Home", FormMethod.Post))
             {
                 <section>
+
                     <table style="margin:auto">
+                        <caption style="color:black">Sibi Request Info</caption>
                         <thead style="background-color:cornflowerblue">
                             <tr>
-                                <th><label style="color:black">ID</label></th>
-                                <th><label style="color:black">Change Type</label></th>
-                                <th><label style="color:black">Note</label></th>
-                                <th><label style="color:black">Item Description</label></th>
+                                <th><label style="color:black">Description</label></th>
+                                <th><label style="color:black">Type</label></th>
+                                <th><label style="color:black">Status</label></th>
+                                <th><label style="color:black">Need By</label></th>
+                                <th><label style="color:black">PO</label></th>
+                                <th><label style="color:black">Requisition #</label></th>
+                                <th><label style="color:black">RT #</label></th>
                             </tr>
                         </thead>
                         <tbody style="color:black">
-                            <tr>
-                                <td>@Html.ValueFor(m => m.GUID)</td>
-                                <td>@Html.ValueFor(m => m.Type) </td>
-                                <td>@Html.ValueFor(m => m.Note) </td>
-                                <td>@Html.ValueFor(m => m.SibiRequestItemInfo.Description)</td>
+
+                            <tr style="background-color:lightgray">
+                                <td>@Model.SibiRequest.Description</td>
+                                <td>@Model.SibiRequest.RequestType</td>
+                                <td>@Model.SibiRequest.Status</td>
+                                <td>@Model.SibiRequest.NeedByDate</td>
+                                <td>@Model.SibiRequest.PO</td>
+                                <td>@Model.SibiRequest.RequisitionNumber</td>
+                                <td>@Model.SibiRequest.RTNumber</td>
                             </tr>
+
+                        </tbody>
+                    </table>
+
+
+                </section>
+                <br />
+                <br />
+
+
+                <section>
+                    <table style="margin:auto">
+                        <caption style="color:black">Item Info</caption>
+                        <thead style="background-color:cornflowerblue">
+                            <tr>
+                                @*<th><label style="color:black">ID</label></th>*@
+                                @*<th><label style="color:black">Change Type</label></th>*@
+                                @*<th><label style="color:black">Note</label></th>*@
+                                <th><label style="color:black">Change Type</label></th>
+                                <th><label style="color:black">Description</label></th>
+                                <th><label style="color:black">User</label></th>
+                                <th><label style="color:black">Quantity</label></th>
+                                <th><label style="color:black">Location</label></th>
+                                <th><label style="color:black">Replace Asset</label></th>
+                                <th><label style="color:black">Replace Serial</label></th>
+                                <th><label style="color:black">Org Code</label></th>
+                                <th><label style="color:black">Object Code</label></th>
+                            </tr>
+                        </thead>
+                        <tbody style="color:black">
+                            @foreach (var item in Model.SibiRequestItems)
+                            {
+                                <tr style="background-color:lightgray">
+                                    <td>@item.ChangeType</td>
+                                    <td>@item.Description</td>
+                                    <td>@item.User</td>
+                                    <td>@item.Qty</td>
+                                    <td>@item.Location</td>
+                                    <td>@item.ReplaceAsset</td>
+                                    <td>@item.ReplaceSerial</td>
+                                    <td>@item.OrgCode</td>
+                                    <td>@item.ObjCode</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </section>

@@ -6,13 +6,13 @@ using System.Data;
 
 namespace ASPTest.Emailer
 {
-    public class DBPoller
+    public static class DBPoller
     {
 
-        public void RequestMonitor()
+        public static void RequestMonitor()
         {
 
-            int maxloops = 10;
+            int maxloops = 50;
             int loops = 0;
 
             do
@@ -22,7 +22,7 @@ namespace ASPTest.Emailer
                 List<Models.RequestApproval> requestList; //= new List<Models.RequestApproval>();
 
 
-                using (var results = DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM sibi_request_items_approvals"))
+                using (var results = DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM sibi_request_items_approvals WHERE approval_sent = '0' AND approval_status = 'new'"))
                 {
                     if (results.Rows.Count > 0)
                     {
@@ -37,6 +37,7 @@ namespace ASPTest.Emailer
 
                         }
 
+                        ProcessRequests(requestList);
 
 
                     }
@@ -44,32 +45,37 @@ namespace ASPTest.Emailer
 
                 }
 
-
-
-
-
-
-
-
-
-                    Task.Delay(5000).Wait();
+                Task.Delay(5000).Wait();
 
             } while (loops < maxloops);
 
 
-                    
+
         }
 
-        private void ProcessRequest(List<Models.RequestApproval> requests)
+        public static async void StartPoller()
+        {
+          await Task.Run(() =>
+                {
+                    RequestMonitor();
+                });
+        }
+
+        private static void ProcessRequests(List<Models.RequestApproval> approvals)
         {
 
-            foreach (var request in requests)
+            foreach (var approval in approvals)
             {
 
-                if (!request.ApprovalSent && request.ApprovalStatus == "pending")
-                {
-                    // Send email and set Sent flag.
-                } 
+                SMTPMailer.SendNewApproval(approval);
+
+                //if (!request.ApprovalSent && request.ApprovalStatus == "pending")
+                //{
+                //    // Send email and set Sent flag.
+
+
+
+                //} 
 
 
 

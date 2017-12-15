@@ -144,6 +144,14 @@ namespace ASPTest
         public const string ObjectCode = "sibi_items_object_code";
         public const string Qty = "sibi_items_qty";
         public const string Timestamp = "sibi_items_timestamp";
+        public const string BudgetLineNo = "sibi_items_budget_lineno";
+        public const string RequiresApproval = "sibi_items_requires_approval";
+        public const string ApproverId = "sibi_items_approver_id";
+        public const string RequestorId = "sibi_items_requestor_id";
+        public const string ModifyStatus = "sibi_items_modify_status";
+        public const string ApprovalID = "sibi_items_approval_id";
+        public const string ChangeType = "sibi_items_change_type";
+
     }
 }
 namespace ASPTest

@@ -7,11 +7,40 @@ namespace ASPTest
 {
     public static class DBFunctions
     {
-        public static void PopRequestData(ref Models.RequestApproval request)
+        public static void PopRequestData(ref Models.RequestApproval approval)
         {
-            var query = "SELECT * FROM " + request.TableName + " WHERE uid ='" + request.GUID + "'";
-            request = new Models.RequestApproval(DBFactory.GetDatabase().DataTableFromQueryString(query));
-            request.MapClassProperties(DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM " + SibiRequestItemsCols.TableName + " WHERE " + SibiRequestItemsCols.ItemUID + " = '" + request.SibiRequestItemUID + "'"));
+            var approvalQuery = "SELECT * FROM " + approval.TableName + " WHERE uid ='" + approval.GUID + "'";
+            approval = new Models.RequestApproval(DBFactory.GetDatabase().DataTableFromQueryString(approvalQuery));
+
+
+            var itemsQuery = "SELECT * FROM " + SibiRequestItemsCols.TableName + " WHERE " + SibiRequestItemsCols.ApprovalID + " = '" + approval.GUID + "'";
+
+            using (var itemsTable = DBFactory.GetDatabase().DataTableFromQueryString(itemsQuery))
+            {
+
+                if (itemsTable.Rows.Count > 0)
+                {
+                    approval.SibiRequestItems = new Models.SibiRequestItem[itemsTable.Rows.Count];
+                    for (int i = 0; i < itemsTable.Rows.Count; i++)
+                    {
+                        approval.SibiRequestItems[i] = new Models.SibiRequestItem(itemsTable.Rows[i]);
+
+                    }
+
+
+                }
+
+            }
+            var requestQuery = "SELECT * FROM " + SibiRequestCols.TableName + " WHERE " + SibiRequestCols.UID + " = '" + approval.SibiRequestUID + "'";
+            using (var requestTable = DBFactory.GetDatabase().DataTableFromQueryString(requestQuery))
+            {
+                approval.SibiRequest = new Models.SibiRequest(requestTable);
+            }
+
+
+
+            //approval.MapClassProperties(DBFactory.GetDatabase().DataTableFromQueryString(itemsQuery));
+            //approval.MapClassProperties(DBFactory.GetDatabase().DataTableFromQueryString("SELECT * FROM " + SibiRequestItemsCols.TableName + " WHERE " + SibiRequestItemsCols.ItemUID + " = '" + approval.SibiRequestUID + "'"));
 
         }
 
@@ -61,6 +90,12 @@ namespace ASPTest
 
         }
 
+        public static void SetNotifySent(string approvalID)
+        {
+            var setSentQuery = "UPDATE sibi_request_items_approvals SET approval_sent = '1', approval_status = 'pending' WHERE uid = '" + approvalID + "'";
+            int affectedRows = DBFactory.GetDatabase().ExecuteQuery(setSentQuery);
+            Console.WriteLine(affectedRows.ToString());
+        }
 
 
     }

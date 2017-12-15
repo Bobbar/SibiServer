@@ -10,6 +10,7 @@ namespace ASPTest.Models
     {
 
         public SibiRequestItem(DataTable data) : base(data) { }
+        public SibiRequestItem(DataRow data) : base(data) { }
         public SibiRequestItem() { }
 
         [DataColumnName(SibiRequestItemsCols.ItemUID)]
@@ -40,8 +41,11 @@ namespace ASPTest.Models
         public string Qty { get; set; }
         [DataColumnName(SibiRequestItemsCols.Timestamp)]
         public string TimeStamp { get; set; }
-        [DataColumnName("sibi_items_budget_lineno")]
+        [DataColumnName(SibiRequestItemsCols.BudgetLineNo)]
         public string BudgetLineNo { get; set; }
+        [DataColumnName(SibiRequestItemsCols.ChangeType)]
+        public string ChangeType { get; set; }
+
 
         public override string TableName { get; set; } = SibiRequestItemsCols.TableName;
     }

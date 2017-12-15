@@ -8,33 +8,10 @@ namespace ASPTest.Models
 {
     public class RequestApproval : DataMapObject
     {
-        [DataColumnName("uid")]
-        public override string GUID { get; set; }
-        public override string TableName { get; set; } = "sibi_request_items_approvals";
-        [DataColumnName("approval_note")]
-        public string Note { get; set; }
-        [DataColumnName("approval_type")]
-        public string Type { get; set; }
-        [DataColumnName("requestor_name")]
-        public string RequestorName { get; set; }
 
-        [DataColumnName("approval_sent")]
-        public bool ApprovalSent { get; set; }
+        private string approverID;
+        private string requestorID;
 
-        [DataColumnName("approval_status")]
-        public string ApprovalStatus { get; set; }
-
-        [DataColumnName("sibi_request_item_uid")]
-        public string SibiRequestItemUID { get; set; }
-
-
-        public bool PostSuccess { get; set; }
-
-
-        public SibiRequestItem SibiRequestItemInfo { get; set; } = new SibiRequestItem();
-
-
-        
 
         public RequestApproval(DataTable data) : base(data)
         {
@@ -59,5 +36,63 @@ namespace ASPTest.Models
             this.GUID = requestID;
             this.PostSuccess = success;
         }
+
+
+        public override string TableName { get; set; } = "sibi_request_items_approvals";
+
+        [DataColumnName("uid")]
+        public override string GUID { get; set; }
+
+        [DataColumnName("approval_note")]
+        public string Note { get; set; }
+
+        [DataColumnName("approval_sent")]
+        public bool ApprovalSent { get; set; }
+
+        [DataColumnName("approval_status")]
+        public string ApprovalStatus { get; set; }
+
+        [DataColumnName("sibi_request_uid")]
+        public string SibiRequestUID { get; set; }
+
+        [DataColumnName("approver_id")]
+        public string ApproverID
+        {
+            get
+            {
+                return approverID;
+            }
+
+            set
+            {
+                approverID = value;
+                this.Approver = new User(approverID);
+            }
+        }
+
+        [DataColumnName("requestor_id")]
+        public string RequestorID
+        {
+            get
+            {
+                return requestorID;
+            }
+            set
+            {
+                requestorID = value;
+                this.Requestor = new User(requestorID);
+            }
+        }
+
+        public User Approver { get; set; } = new User();
+        public User Requestor { get; set; } = new User();
+
+
+        public bool PostSuccess { get; set; }
+
+        public SibiRequest SibiRequest { get; set; } = new SibiRequest();
+        public SibiRequestItem[] SibiRequestItems { get; set; }// = new SibiRequestItem[]();
+
+
     }
 }

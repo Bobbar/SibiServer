@@ -12,7 +12,7 @@ namespace ASPTest
 {
     public class Startup
     {
-       // string connString = "server=10.10.0.89;port=3306;database=test_db;user=approval_user;password=password";
+        // string connString = "server=10.10.0.89;port=3306;database=test_db;user=approval_user;password=password";
         //public Startup(IHostingEnvironment env)
         //{
         //    var builder = new ConfigurationBuilder()
@@ -31,7 +31,7 @@ namespace ASPTest
         {
             services.AddMvc();
             //services.Add(new ServiceDescriptor(typeof(MySQLComms), new MySQLComms(Configuration.GetConnectionString("DefaultConnection"))));
-           // services.Add(new ServiceDescriptor(typeof(MySQLCommsOLD), new MySQLCommsOLD(connString)));
+            // services.Add(new ServiceDescriptor(typeof(MySQLCommsOLD), new MySQLCommsOLD(connString)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +53,7 @@ namespace ASPTest
                    name: "default",
                    template: "{controller=Home}/{action=Appoval}/{id?}");
             });
+
             //    app.Run(async (context) =>
             //    {
             //        await context.Response.WriteAsync("Hello World!");

@@ -14,6 +14,8 @@ namespace ASPTest
     {
         public static void Main(string[] args)
         {
+            Emailer.DBPoller.StartPoller();
+
             BuildWebHost(args).Run();
         }
 

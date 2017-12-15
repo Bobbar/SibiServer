@@ -109,18 +109,18 @@ namespace ASPTest
                         {
                             prop.SetValue(obj, row[propColumn].ToString(), null);
                         }
-                        //else if (prop.PropertyType == typeof(DateTime))
-                        //{
-                        //    DateTime pDate = default(DateTime);
-                        //    if (DateTime.TryParse(DataConsistency.NoNull(row[propColumn].ToString()), out pDate))
-                        //    {
-                        //        prop.SetValue(obj, pDate);
-                        //    }
-                        //    else
-                        //    {
-                        //        prop.SetValue(obj, null);
-                        //    }
-                        //}
+                        else if (prop.PropertyType == typeof(DateTime))
+                        {
+                            DateTime pDate = default(DateTime);
+                            if (DateTime.TryParse(DataConsistency.NoNull(row[propColumn].ToString()), out pDate))
+                            {
+                                prop.SetValue(obj, pDate);
+                            }
+                            else
+                            {
+                                prop.SetValue(obj, null);
+                            }
+                        }
                         else if (prop.PropertyType == typeof(bool))
                         {
                             prop.SetValue(obj, Convert.ToBoolean(row[propColumn]));
