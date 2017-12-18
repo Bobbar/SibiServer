@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Data;
 
-namespace ASPTest.Models
+namespace SibiServer.Models
 {
     public class User : DataMapObject
     {

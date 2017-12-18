@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Data;
 
-namespace ASPTest.Emailer
+namespace SibiServer.Emailer
 {
     public static class DBPoller
     {

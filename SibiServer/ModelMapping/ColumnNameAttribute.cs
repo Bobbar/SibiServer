@@ -1,5 +1,5 @@
 using System;
-namespace ASPTest
+namespace SibiServer
 {
     [AttributeUsage(AttributeTargets.Property)]
 	public class DataColumnNameAttribute : Attribute

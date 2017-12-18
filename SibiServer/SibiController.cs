@@ -6,15 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace ASPTest
+namespace SibiServer
 {
-    public class HomeController : Controller
+    public class SibiController : Controller
     {
         // GET: /<controller>/
-        public IActionResult Index()
+        public IActionResult Index(string userid)
         {
 
-
+            Console.WriteLine(userid);
             return View();
         }
 

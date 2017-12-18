@@ -1,4 +1,4 @@
-namespace ASPTest
+namespace SibiServer
 {
     public class DevicesBaseCols
     {
@@ -21,7 +21,7 @@ namespace ASPTest
         public const string iCloudAccount = "dev_icloud_account";
     }
 }
-namespace ASPTest
+namespace SibiServer
 {
 
     public class DevicesCols : DevicesBaseCols
@@ -35,7 +35,7 @@ namespace ASPTest
         public const string MunisEmpNum = "dev_cur_user_emp_num";
     }
 }
-namespace ASPTest
+namespace SibiServer
 {
 
     public class HistoricalDevicesCols : DevicesBaseCols
@@ -48,7 +48,7 @@ namespace ASPTest
         public const string ActionUser = "hist_action_user";
     }
 }
-namespace ASPTest
+namespace SibiServer
 {
 
     public class TrackablesCols
@@ -69,7 +69,7 @@ namespace ASPTest
         public const string DateStamp = "track_datestamp";
     }
 }
-namespace ASPTest
+namespace SibiServer
 {
 
     public abstract class AttachmentsBaseCols
@@ -86,7 +86,7 @@ namespace ASPTest
         public string Folder { get; } = "attach_folder";
     }
 }
-namespace ASPTest
+namespace SibiServer
 {
 
     public class DeviceAttachmentsCols : AttachmentsBaseCols
@@ -94,7 +94,7 @@ namespace ASPTest
         public override string TableName { get; } = "dev_attachments";
     }
 }
-namespace ASPTest
+namespace SibiServer
 {
 
     public class SibiAttachmentsCols : AttachmentsBaseCols
@@ -102,7 +102,7 @@ namespace ASPTest
         public override string TableName { get; } = "sibi_attachments";
     }
 }
-namespace ASPTest
+namespace SibiServer
 {
 
     public class SibiRequestCols
@@ -124,7 +124,7 @@ namespace ASPTest
         public const string RTNumber = "sibi_RT_number";
     }
 }
-namespace ASPTest
+namespace SibiServer
 {
 
     public class SibiRequestItemsCols
@@ -154,7 +154,7 @@ namespace ASPTest
 
     }
 }
-namespace ASPTest
+namespace SibiServer
 {
 
     public class SibiNotesCols
@@ -166,7 +166,7 @@ namespace ASPTest
         public const string Note = "sibi_note";
     }
 }
-namespace ASPTest
+namespace SibiServer
 {
 
     public class ComboCodesBaseCols
@@ -178,7 +178,7 @@ namespace ASPTest
         public const string Color = "hex_color";
     }
 }
-namespace ASPTest
+namespace SibiServer
 {
 
     public class DeviceComboCodesCols : ComboCodesBaseCols
@@ -187,7 +187,7 @@ namespace ASPTest
         public const string MunisCode = "munis_code";
     }
 }
-namespace ASPTest
+namespace SibiServer
 {
 
     public class SibiComboCodesCols : ComboCodesBaseCols
@@ -195,7 +195,7 @@ namespace ASPTest
         public const string TableName = "sibi_codes";
     }
 }
-namespace ASPTest
+namespace SibiServer
 {
 
     public class SecurityCols
@@ -207,7 +207,7 @@ namespace ASPTest
         public const string AvailOffline = "sec_availoffline";
     }
 }
-namespace ASPTest
+namespace SibiServer
 {
 
     public class UsersCols
@@ -219,7 +219,7 @@ namespace ASPTest
         public const string UID = "usr_UID";
     }
 }
-namespace ASPTest
+namespace SibiServer
 {
 
     public class EmployeesCols
@@ -230,7 +230,7 @@ namespace ASPTest
         public const string UID = "emp_UID";
     }
 }
-namespace ASPTest
+namespace SibiServer
 {
 
     public sealed class DeviceAttribType
@@ -243,7 +243,7 @@ namespace ASPTest
         public const string StatusType = "STATUS_TYPE";
     }
 }
-namespace ASPTest
+namespace SibiServer
 {
 
     public sealed class SibiAttribType
@@ -255,7 +255,7 @@ namespace ASPTest
         public const string SibiAttachFolder = "ATTACH_FOLDER";
     }
 }
-namespace ASPTest
+namespace SibiServer
 {
 
     public sealed class CheckType

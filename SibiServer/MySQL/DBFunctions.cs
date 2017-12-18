@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ASPTest
+namespace SibiServer
 {
     public static class DBFunctions
     {

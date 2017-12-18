@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 
-namespace ASPTest
+namespace SibiServer
 {
     public class Startup
     {
@@ -49,9 +49,14 @@ namespace ASPTest
                 //    name: "default",
                 //    template: "{controller=Home}/{action=Index}/{id?}");
 
+                //routes.MapRoute(
+                //   name: "default",
+                //   template: "{controller=Sibi}/{action=Appoval}/{id?}");
                 routes.MapRoute(
                    name: "default",
-                   template: "{controller=Home}/{action=Appoval}/{id?}");
+                   template: "{controller=Sibi}/{action=Appoval}/{id?}");
+
+               
             });
 
             //    app.Run(async (context) =>

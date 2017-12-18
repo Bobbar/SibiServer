@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 
-namespace ASPTest
+namespace SibiServer
 {
     public class MySQLDatabase : IDisposable, IDataBase
     {

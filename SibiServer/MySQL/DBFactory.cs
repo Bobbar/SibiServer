@@ -1,4 +1,4 @@
-namespace ASPTest
+namespace SibiServer
 {
     public static class DBFactory
     {

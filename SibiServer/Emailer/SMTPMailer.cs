@@ -6,7 +6,7 @@ using System.Net.Mail;
 using System.ComponentModel;
 
 
-namespace ASPTest.Emailer
+namespace SibiServer.Emailer
 {
     public static class SMTPMailer
     {
