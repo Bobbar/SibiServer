@@ -1,0 +1,89 @@
+﻿@model SibiServer.Models.RequestApproval
+@using System.Data;
+@using AssetManager;
+
+@{
+    ViewData["Title"] = "MyApprovals";
+    Layout = "_Navbar";
+    DataTable approvalsTable = (DataTable)ViewBag.ApprovalsTable;
+}
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sibi Approvals - @Model.SibiRequest.Description</title>
+    @*<meta name="description" content="Creative Button Styles  - Modern and subtle styles &amp; effects for buttons" />
+        <meta name="keywords" content="button styles, css3, modern, flat button, subtle, effects, hover, web design" />
+        <meta name="author" content="Codrops" />*@
+    @*<link rel="shortcut icon" href="../favicon.ico">*@
+    <link rel="stylesheet" type="text/css" href="~/css/default.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/component.css" />
+    @*<link rel="stylesheet" type="text/css" href="~/css/cssreset.css" />*@
+    @*<script src="js/modernizr.custom.js"></script>*@
+</head>
+
+@*<p>
+        <a asp-action="Create">Create New</a>
+    </p>*@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>Status</th>
+            <th>Approval GUID</th>
+            <th>Sibi Request GUID</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (DataRow row in approvalsTable.Rows)
+        {
+        <tr>
+            <td>
+                @row[SibiApprovalColumns.Timestamp].ToString()
+            </td>
+            <td>
+                @row[SibiApprovalColumns.Status].ToString()
+            </td>
+            <td>
+                @row[SibiApprovalColumns.UID].ToString()
+            </td>
+            <td>
+                @row[SibiApprovalColumns.RequestUID].ToString()
+            </td>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.GUID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Note)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApprovalSent)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApprovalStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SibiRequestUID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApproverID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RequestorID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PostSuccess)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>*@
+        </tr>
+        }
+    </tbody>
+</table>
+</html>

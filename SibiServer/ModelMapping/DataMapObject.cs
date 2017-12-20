@@ -129,6 +129,10 @@ namespace SibiServer
                         {
                             prop.SetValue(obj, Convert.ToInt32(row[propColumn]));
                         }
+                        else if (prop.PropertyType == typeof(byte[]))
+                        {
+                            prop.SetValue(obj,row[propColumn]);
+                        }
                         else
                         {
                             //Throw an error if type is unexpected.

@@ -1,8 +1,8 @@
 ﻿@model SibiServer.Models.RequestApproval
 @{
-    // Layout = null;
+    Layout = "_Navbar";
     ViewData["Title"] = "Approval";
-
+    // ViewData["ApprovalObject"] = Model;
 }
 
 @*<h2>Index</h2>
@@ -14,7 +14,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Change Approval </title>
+    <title>Sibi Approvals - @Model.SibiRequest.Description</title>
     @*<meta name="description" content="Creative Button Styles  - Modern and subtle styles &amp; effects for buttons" />
         <meta name="keywords" content="button styles, css3, modern, flat button, subtle, effects, hover, web design" />
         <meta name="author" content="Codrops" />*@
@@ -37,19 +37,13 @@
 
 
 
-
-
-
-
-
-
-            @using (Html.BeginForm("Approval", "Home", FormMethod.Post))
+            @using (Html.BeginForm("Approval", "Sibi", FormMethod.Post))
             {
                 <section>
 
                     <table style="margin:auto">
                         <caption style="color:black">Sibi Request Info</caption>
-                        <thead style="background-color:cornflowerblue">
+                        <thead style="background-color:#b9cdff">
                             <tr>
                                 <th><label style="color:black">Description</label></th>
                                 <th><label style="color:black">Type</label></th>
@@ -83,8 +77,8 @@
 
                 <section>
                     <table style="margin:auto">
-                        <caption style="color:black">Item Info</caption>
-                        <thead style="background-color:cornflowerblue">
+                        <caption style="color:black">New Info</caption>
+                        <thead style="background-color:#b9cdff">
                             <tr>
                                 @*<th><label style="color:black">ID</label></th>*@
                                 @*<th><label style="color:black">Change Type</label></th>*@
@@ -101,26 +95,67 @@
                             </tr>
                         </thead>
                         <tbody style="color:black">
-                            @foreach (var item in Model.SibiRequestItems)
+                            @foreach (var item in Model.ApprovalItems)
                             {
                                 <tr style="background-color:lightgray">
-                                    <td>@item.ChangeType</td>
-                                    <td>@item.Description</td>
-                                    <td>@item.User</td>
-                                    <td>@item.Qty</td>
-                                    <td>@item.Location</td>
-                                    <td>@item.ReplaceAsset</td>
-                                    <td>@item.ReplaceSerial</td>
-                                    <td>@item.OrgCode</td>
-                                    <td>@item.ObjCode</td>
+                                    <td>@item.NewItemValues.ChangeType</td>
+                                    <td>@item.NewItemValues.Description</td>
+                                    <td>@item.NewItemValues.User</td>
+                                    <td>@item.NewItemValues.Qty</td>
+                                    <td>@item.NewItemValues.Location</td>
+                                    <td>@item.NewItemValues.ReplaceAsset</td>
+                                    <td>@item.NewItemValues.ReplaceSerial</td>
+                                    <td>@item.NewItemValues.OrgCode</td>
+                                    <td>@item.NewItemValues.ObjCode</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    
+                    
+                    <table style="margin:auto">
+                        <caption style="color:black">Previous Info</caption>
+                        <thead style="background-color:#b9cdff">
+                            <tr>
+                                @*<th><label style="color:black">ID</label></th>*@
+                                @*<th><label style="color:black">Change Type</label></th>*@
+                                @*<th><label style="color:black">Note</label></th>*@
+                                <th><label style="color:black">Change Type</label></th>
+                                <th><label style="color:black">Description</label></th>
+                                <th><label style="color:black">User</label></th>
+                                <th><label style="color:black">Quantity</label></th>
+                                <th><label style="color:black">Location</label></th>
+                                <th><label style="color:black">Replace Asset</label></th>
+                                <th><label style="color:black">Replace Serial</label></th>
+                                <th><label style="color:black">Org Code</label></th>
+                                <th><label style="color:black">Object Code</label></th>
+                            </tr>
+                        </thead>
+                        <tbody style="color:black">
+                            @foreach (var item in Model.ApprovalItems)
+                            {
+                                <tr style="background-color:lightgray">
+                                    <td>@item.OldItemValues.ChangeType</td>
+                                    <td>@item.OldItemValues.Description</td>
+                                    <td>@item.OldItemValues.User</td>
+                                    <td>@item.OldItemValues.Qty</td>
+                                    <td>@item.OldItemValues.Location</td>
+                                    <td>@item.OldItemValues.ReplaceAsset</td>
+                                    <td>@item.OldItemValues.ReplaceSerial</td>
+                                    <td>@item.OldItemValues.OrgCode</td>
+                                    <td>@item.OldItemValues.ObjCode</td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </section>
-                @Html.HiddenFor(m => m.Note)
+                @*@Html.HiddenFor(m => m.Note)*@
                 @Html.HiddenFor(m => m.GUID)
                 @Html.HiddenFor(m => m.PostSuccess)
+                <section>
+                    <p><p style="color:black">Note:</p>
+                    @Html.TextAreaFor(m => m.Note, 5, 50, null) </p>
+                </section>
 
                 <section>
                     <p class="perspective">
@@ -154,33 +189,38 @@
 
 
             if (suc) {
-                activatedClass = 'btn-success3d';
-                console.log(btn);
-                if (!classie.has(btn, activatedClass)) {
-                    //classie.add(btn, activatedClass);
-                    setTimeout(function () {
-                        classie.add(btn, activatedClass);
-                    }, 250);
-                    //setTimeout(function () {
-                    //    btn.textContent = "SUCCESS!";
-                    //    classie.remove(btn, activatedClass);
-                    //}, 2000);
+                btn.textContent = "SUCCESS!";
 
-                }
+                //activatedClass = 'btn-success3d';
+                //console.log(btn);
+                //if (!classie.has(btn, activatedClass)) {
+                //    //classie.add(btn, activatedClass);
+                //    setTimeout(function () {
+                //        classie.add(btn, activatedClass);
+                //    }, 250);
+                //    //setTimeout(function () {
+                //    //    btn.textContent = "SUCCESS!";
+                //    //    classie.remove(btn, activatedClass);
+                //    //}, 2000);
+
+                //}
             }
             else {
-                activatedClass = "btn-error3d";
-                if (!classie.has(btn, activatedClass)) {
-                    //classie.add(btn, activatedClass);
-                    setTimeout(function () {
-                        classie.add(btn, activatedClass);
-                    }, 250);
-                    //setTimeout(function () {
-                    //    btn.textContent = "ERROR!";
-                    //    classie.remove(btn, activatedClass);
-                    //}, 2000);
-                    document.getElementById('lblStatus').textContent = "Result: ERROR"
-                }
+                document.getElementById('lblStatus').textContent = "Result: ERROR";
+                btn.textContent = "ERROR!";
+                btn.getElementById.style.backgroundColor = '#ff6868';
+                //activatedClass = "btn-error3d";
+                //if (!classie.has(btn, activatedClass)) {
+                //    //classie.add(btn, activatedClass);
+                //    setTimeout(function () {
+                //        classie.add(btn, activatedClass);
+                //    }, 250);
+                //    //setTimeout(function () {
+                //    //    btn.textContent = "ERROR!";
+                //    //    classie.remove(btn, activatedClass);
+                //    //}, 2000);
+                //    document.getElementById('lblStatus').textContent = "Result: ERROR"
+                //}
 
             }
         }
@@ -195,7 +235,7 @@
         {
             <script>
                 var btn = document.getElementById('btnApprove')
-                //   document.getElementById('btnReject').style.display = 'none';
+                document.getElementById('btnReject').style.display = 'none';
                 document.getElementById('lblStatus').textContent = "Result: Accepted"
             </script>
 
@@ -205,7 +245,7 @@
 
             <script>
                 var btn = document.getElementById('btnReject')
-                // document.getElementById('btnApprove').style.display = 'none';
+                document.getElementById('btnApprove').style.display = 'none';
                 document.getElementById('lblStatus').textContent = "Result: Rejected"
             </script>
         }

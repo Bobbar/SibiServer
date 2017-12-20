@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Data;
-
+using AssetManager;
 namespace SibiServer.Models
 {
     public class SibiRequest : DataMapObject

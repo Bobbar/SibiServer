@@ -132,6 +132,24 @@ namespace SibiServer
             return trans;
         }
 
+        public void CommitTransaction(DbTransaction transaction)
+        {
+            var conn = transaction.Connection;
+            transaction.Commit();
+            conn.Close();
+            conn.Dispose();
+            transaction.Dispose();
+        }
+
+        public void RollbackTransaction(DbTransaction transaction)
+        {
+            var conn = transaction.Connection;
+            transaction.Rollback();
+            conn.Close();
+            conn.Dispose();
+            transaction.Dispose();
+        }
+
         public DataTable DataTableFromQueryString(string query)
         {
             using (DataTable results = new DataTable())
@@ -221,6 +239,41 @@ namespace SibiServer
             {
                 OpenConnection(conn);
                 return cmd.ExecuteNonQuery();
+            }
+        }
+
+        public int ExecuteQuery(DbCommand command, DbTransaction transaction = null)
+        {
+            if (transaction != null)
+            {
+                var conn = (MySqlConnection)transaction.Connection;
+                command.Connection = conn;
+                using (command)
+                {
+                    return command.ExecuteNonQuery();
+                }
+
+            }
+            else
+            {
+                if (command.Connection == null)
+                {
+                    using (var conn = NewConnection())
+                    using (command)
+                    {
+                        command.Connection = conn;
+                        OpenConnection(conn);
+                        return command.ExecuteNonQuery();
+                    }
+                }
+                else
+                {
+                    using (command.Connection)
+                    using (command)
+                    {
+                        return command.ExecuteNonQuery();
+                    }
+                }
             }
         }
 

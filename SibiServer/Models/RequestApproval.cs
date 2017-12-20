@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Data;
+using AssetManager;
 
 namespace SibiServer.Models
 {
@@ -31,31 +32,32 @@ namespace SibiServer.Models
             this.GUID = requestID;
             this.PostSuccess = false;
         }
-        public RequestApproval(string requestID, bool success)
-        {
-            this.GUID = requestID;
-            this.PostSuccess = success;
-        }
+
+        //public RequestApproval(string requestID, bool success)
+        //{
+        //    this.GUID = requestID;
+        //    this.PostSuccess = success;
+        //}
 
 
-        public override string TableName { get; set; } = "sibi_request_items_approvals";
+        public override string TableName { get; set; } = SibiApprovalColumns.TableName;
 
-        [DataColumnName("uid")]
+        [DataColumnName(SibiApprovalColumns.UID)]
         public override string GUID { get; set; }
 
-        [DataColumnName("approval_note")]
+        [DataColumnName(SibiApprovalColumns.Note)]
         public string Note { get; set; }
 
-        [DataColumnName("approval_sent")]
+        [DataColumnName(SibiApprovalColumns.NotifySent)]
         public bool ApprovalSent { get; set; }
 
-        [DataColumnName("approval_status")]
+        [DataColumnName(SibiApprovalColumns.Status)]
         public string ApprovalStatus { get; set; }
 
-        [DataColumnName("sibi_request_uid")]
+        [DataColumnName(SibiApprovalColumns.RequestUID)]
         public string SibiRequestUID { get; set; }
 
-        [DataColumnName("approver_id")]
+        [DataColumnName(SibiApprovalColumns.ApproverID)]
         public string ApproverID
         {
             get
@@ -70,7 +72,7 @@ namespace SibiServer.Models
             }
         }
 
-        [DataColumnName("requestor_id")]
+        [DataColumnName(SibiApprovalColumns.RequestorID)]
         public string RequestorID
         {
             get
@@ -91,7 +93,8 @@ namespace SibiServer.Models
         public bool PostSuccess { get; set; }
 
         public SibiRequest SibiRequest { get; set; } = new SibiRequest();
-        public SibiRequestItem[] SibiRequestItems { get; set; }// = new SibiRequestItem[]();
+        // public SibiRequestItem[] SibiRequestItems { get; set; }// = new SibiRequestItem[]();
+        public ApprovalItem[] ApprovalItems { get; set; }
 
 
     }

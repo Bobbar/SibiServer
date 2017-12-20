@@ -46,6 +46,7 @@ namespace SibiServer
             Console.WriteLine("Approve CLicked!  " + response);
             ViewData["state"] = "posted";
             ViewData["response"] = response;
+          //  ViewBag.Approval = r;
 
             if (response == "accept")
             {
@@ -63,6 +64,15 @@ namespace SibiServer
             }
             return View(r);
 
+           
+        }
+
+        public IActionResult MyApprovals(Models.RequestApproval r, string approverId)
+        {
+            //var m = (Models.RequestApproval)ViewBag.Approval;
+            Console.WriteLine(r.ApproverID);
+            ViewBag.ApprovalsTable = DBFunctions.GetApprovalsTable(approverId);
+            return View(r);
         }
 
 

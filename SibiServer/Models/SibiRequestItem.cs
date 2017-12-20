@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Data;
+using AssetManager;
 
 namespace SibiServer.Models
 {
@@ -11,6 +12,11 @@ namespace SibiServer.Models
 
         public SibiRequestItem(DataTable data) : base(data) { }
         public SibiRequestItem(DataRow data) : base(data) { }
+        public SibiRequestItem(string itemUID)
+        {
+            PopulateFromUID(itemUID);
+        }
+
         public SibiRequestItem() { }
 
         [DataColumnName(SibiRequestItemsCols.ItemUID)]
@@ -45,8 +51,21 @@ namespace SibiServer.Models
         public string BudgetLineNo { get; set; }
         [DataColumnName(SibiRequestItemsCols.ChangeType)]
         public string ChangeType { get; set; }
-
+        [DataColumnName(SibiRequestItemsCols.ApproverId)]
+        public string ApproverId { get; set; }
+        [DataColumnName(SibiRequestItemsCols.RequestorId)]
+        public string RequestorId { get; set; }
 
         public override string TableName { get; set; } = SibiRequestItemsCols.TableName;
+
+
+        private void PopulateFromUID(string itemUID)
+        {
+            var selectItemQuery = "SELECT * FROM " + SibiRequestItemsCols.TableName + " WHERE " + SibiRequestItemsCols.ItemUID + " = '" + itemUID + "'";
+            using (var results = DBFactory.GetDatabase().DataTableFromQueryString(selectItemQuery))
+            {
+                this.MapClassProperties(results);
+            }
+        }
     }
 }

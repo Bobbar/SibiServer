@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\AssetManagerCSharp\AssetManager\Data\DataComms\AssetManager\SQL\DataColumns.cs" Link="ModelMapping\DataColumns.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
