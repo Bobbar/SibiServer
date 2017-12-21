@@ -1,6 +1,7 @@
 ﻿@model SibiServer.Models.RequestApproval
+@using SibiServer
 @{
-    Layout = "_Navbar";
+    Layout = "_NavbarNew";
     ViewData["Title"] = "Approval";
     // ViewData["ApprovalObject"] = Model;
 }
@@ -9,7 +10,7 @@
 
     <p>Hello from our View Template!</p>*@
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -19,47 +20,71 @@
         <meta name="keywords" content="button styles, css3, modern, flat button, subtle, effects, hover, web design" />
         <meta name="author" content="Codrops" />*@
     @*<link rel="shortcut icon" href="../favicon.ico">*@
-    <link rel="stylesheet" type="text/css" href="~/css/default.css" />
-    <link rel="stylesheet" type="text/css" href="~/css/component.css" />
+    @*<link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap.css" />*@
+    @*<link rel="stylesheet" type="text/css" href="~/css/default.css" />
+        <link rel="stylesheet" type="text/css" href="~/css/component.css" />*@
     @*<link rel="stylesheet" type="text/css" href="~/css/cssreset.css" />*@
     @*<script src="js/modernizr.custom.js"></script>*@
 </head>
 <body>
+
+    @if (ViewData["state"].ToString() == "posted")
+    {
+        @if (Model.PostSuccess)
+        {
+            <div class="container">
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <strong>Success!</strong> The approval has been updated.
+                </div>
+            </div>
+
+        }
+        else
+        {
+
+            <div class="container">
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <strong>ERROR!</strong> Something went wrong...
+                </div>
+            </div>
+        }
+    }
+
+
+
     <div class="container">
+    
 
-        <section class="color-8">
+        @using (Html.BeginForm("Approval", "Sibi", FormMethod.Post))
+        {
+            @*<div class="form-group">*@
 
-            <br />
-            @*<p class="perspective">
-                    <button class="btn btn-8 btn-8g" type="button" id="btnApprove">Approve</button>
-                </p>*@
-            @*<p style="color:black">Note @Model.Note</p>*@
-
-
-
-            @using (Html.BeginForm("Approval", "Sibi", FormMethod.Post))
-            {
-                <section>
-
-                    <table style="margin:auto">
-                        <caption style="color:black">Sibi Request Info</caption>
+            <div class="list-group">
+                <a class="list-group-item">
+                    <table class="table table-condensed table-bordered">
+                        <h3>Sibi Request Info</h3>
                         <thead style="background-color:#b9cdff">
                             <tr>
-                                <th><label style="color:black">Description</label></th>
-                                <th><label style="color:black">Type</label></th>
-                                <th><label style="color:black">Status</label></th>
-                                <th><label style="color:black">Need By</label></th>
-                                <th><label style="color:black">PO</label></th>
-                                <th><label style="color:black">Requisition #</label></th>
-                                <th><label style="color:black">RT #</label></th>
+                                <th>Description</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Need By</th>
+                                <th>PO</th>
+                                <th>Requisition #</th>
+                                <th>RT #</th>
                             </tr>
                         </thead>
                         <tbody style="color:black">
-
                             <tr style="background-color:lightgray">
                                 <td>@Model.SibiRequest.Description</td>
-                                <td>@Model.SibiRequest.RequestType</td>
-                                <td>@Model.SibiRequest.Status</td>
+                                <td>@Attributes.SibiAttributes[Model.SibiRequest.RequestType]</td>
+                                <td>@Attributes.SibiAttributes[Model.SibiRequest.Status]</td>
                                 <td>@Model.SibiRequest.NeedByDate</td>
                                 <td>@Model.SibiRequest.PO</td>
                                 <td>@Model.SibiRequest.RequisitionNumber</td>
@@ -69,40 +94,36 @@
                         </tbody>
                     </table>
 
+                </a>
+                <a class="list-group-item list-group-item-success">
 
-                </section>
-                <br />
-                <br />
-
-
-                <section>
-                    <table style="margin:auto">
-                        <caption style="color:black">New Info</caption>
-                        <thead style="background-color:#b9cdff">
+                    <table class="table table-condensed table-bordered">
+                        <h3>New Values</h3>
+                        <thead style="background-color:#aaffb6">
                             <tr>
                                 @*<th><label style="color:black">ID</label></th>*@
                                 @*<th><label style="color:black">Change Type</label></th>*@
                                 @*<th><label style="color:black">Note</label></th>*@
-                                <th><label style="color:black">Change Type</label></th>
-                                <th><label style="color:black">Description</label></th>
-                                <th><label style="color:black">User</label></th>
-                                <th><label style="color:black">Quantity</label></th>
-                                <th><label style="color:black">Location</label></th>
-                                <th><label style="color:black">Replace Asset</label></th>
-                                <th><label style="color:black">Replace Serial</label></th>
-                                <th><label style="color:black">Org Code</label></th>
-                                <th><label style="color:black">Object Code</label></th>
+                                <th>Change Type</th>
+                                <th>Description</th>
+                                <th>User</th>
+                                <th>Quantity</th>
+                                <th>Location</th>
+                                <th>Replace Asset</th>
+                                <th>Replace Serial</th>
+                                <th>Org Code</th>
+                                <th>Object Code</th>
                             </tr>
                         </thead>
                         <tbody style="color:black">
                             @foreach (var item in Model.ApprovalItems)
                             {
                                 <tr style="background-color:lightgray">
-                                    <td>@item.NewItemValues.ChangeType</td>
+                                    <td>@Attributes.SibiAttributes[item.NewItemValues.ChangeType]</td>
                                     <td>@item.NewItemValues.Description</td>
                                     <td>@item.NewItemValues.User</td>
                                     <td>@item.NewItemValues.Qty</td>
-                                    <td>@item.NewItemValues.Location</td>
+                                    <td>@Attributes.SibiAttributes[item.NewItemValues.Location]</td>
                                     <td>@item.NewItemValues.ReplaceAsset</td>
                                     <td>@item.NewItemValues.ReplaceSerial</td>
                                     <td>@item.NewItemValues.OrgCode</td>
@@ -111,35 +132,35 @@
                             }
                         </tbody>
                     </table>
-                    
-                    
-                    <table style="margin:auto">
-                        <caption style="color:black">Previous Info</caption>
-                        <thead style="background-color:#b9cdff">
+                </a>
+                <a class="list-group-item list-group-item-danger">
+                    <table class="table table-condensed table-bordered">
+                        <h3>Old Values</h3>
+                        <thead style="background-color:#ff7a7a">
                             <tr>
                                 @*<th><label style="color:black">ID</label></th>*@
                                 @*<th><label style="color:black">Change Type</label></th>*@
                                 @*<th><label style="color:black">Note</label></th>*@
-                                <th><label style="color:black">Change Type</label></th>
-                                <th><label style="color:black">Description</label></th>
-                                <th><label style="color:black">User</label></th>
-                                <th><label style="color:black">Quantity</label></th>
-                                <th><label style="color:black">Location</label></th>
-                                <th><label style="color:black">Replace Asset</label></th>
-                                <th><label style="color:black">Replace Serial</label></th>
-                                <th><label style="color:black">Org Code</label></th>
-                                <th><label style="color:black">Object Code</label></th>
+                                <th>Change Type</th>
+                                <th>Description</th>
+                                <th>User</th>
+                                <th>Quantity</th>
+                                <th>Location</th>
+                                <th>Replace Asset</th>
+                                <th>Replace Serial</th>
+                                <th>Org Code</th>
+                                <th>Object Code</th>
                             </tr>
                         </thead>
                         <tbody style="color:black">
                             @foreach (var item in Model.ApprovalItems)
                             {
                                 <tr style="background-color:lightgray">
-                                    <td>@item.OldItemValues.ChangeType</td>
+                                    <td>@Attributes.SibiAttributes[item.OldItemValues.ChangeType]</td>
                                     <td>@item.OldItemValues.Description</td>
                                     <td>@item.OldItemValues.User</td>
                                     <td>@item.OldItemValues.Qty</td>
-                                    <td>@item.OldItemValues.Location</td>
+                                    <td>@Attributes.SibiAttributes[item.OldItemValues.Location]</td>
                                     <td>@item.OldItemValues.ReplaceAsset</td>
                                     <td>@item.OldItemValues.ReplaceSerial</td>
                                     <td>@item.OldItemValues.OrgCode</td>
@@ -148,48 +169,59 @@
                             }
                         </tbody>
                     </table>
-                </section>
+
+                </a>
                 @*@Html.HiddenFor(m => m.Note)*@
                 @Html.HiddenFor(m => m.GUID)
                 @Html.HiddenFor(m => m.PostSuccess)
-                <section>
-                    <p><p style="color:black">Note:</p>
-                    @Html.TextAreaFor(m => m.Note, 5, 50, null) </p>
-                </section>
+            </div>
+            @*</div>*@
 
-                <section>
-                    <p class="perspective">
-                        <button class="btn btn-8 btn-8g" style="background-color:#b2ffb4;color:#565656" name="response" value="accept" type="submit" id="btnApprove">Accept</button>
-
-                    </p>
-                    <p class="perspective">
-                        <button class="btn btn-8 btn-8g" style="background-color:#ffb2b2;color:#565656" name="response" value="reject" type="submit" id="btnReject">Reject</button>
-                    </p>
-
-                </section>
-                <section>
-                    <p>
-                        <label id="lblStatus" style="color:black"></label>
-                    </p>
-
-                </section>
-            }
+            <form class="form-inline">
 
 
+                <fieldset id="response_controls">
+
+                    <div class="form-group">
+                        <label>Note:</label>
+                        @Html.TextAreaFor(m => m.Note, new { @class = "form-control", @rows = "5" })
+                    </div>
+
+                    <div class="btn-group-lg">
+
+                        <button class="btn btn-primary btn-lg" style="background-color:#b2ffb4;color:#565656" name="response" value="accept" type="submit" id="btnApprove">Accept</button>
+
+                        <button class="btn btn-primary btn-lg" style="background-color:#ffb2b2;color:#565656" name="response" value="reject" type="submit" id="btnReject">Reject</button>
+                    </div>
+                </fieldset>
+            </form>
 
 
-        </section>
+            <section>
+                <p>
+                    <label id="lblStatus" style="color:black"></label>
+                </p>
+
+            </section>
+        }
+
+
+
+
+
     </div><!-- /container -->
 
     <script src="~/js/classie.js"></script>
     <script>
+
+
 
         function setstate(suc, btn) {
             var self = this, activatedClass = 'btn-activated';
 
 
             if (suc) {
-                btn.textContent = "SUCCESS!";
+               // btn.textContent = "SUCCESS!";
 
                 //activatedClass = 'btn-success3d';
                 //console.log(btn);
@@ -207,8 +239,8 @@
             }
             else {
                 document.getElementById('lblStatus').textContent = "Result: ERROR";
-                btn.textContent = "ERROR!";
-                btn.getElementById.style.backgroundColor = '#ff6868';
+               // btn.textContent = "ERROR!";
+               // btn.getElementById.style.backgroundColor = '#ff6868';
                 //activatedClass = "btn-error3d";
                 //if (!classie.has(btn, activatedClass)) {
                 //    //classie.add(btn, activatedClass);
@@ -231,11 +263,13 @@
 
     @if (ViewData["state"].ToString() == "posted")
     {
+        <script>document.getElementById('response_controls').disabled = true;</script>
         @if (ViewData["response"].ToString() == "accept")
         {
+
             <script>
                 var btn = document.getElementById('btnApprove')
-                document.getElementById('btnReject').style.display = 'none';
+                //document.getElementById('btnReject').style.display = 'none';
                 document.getElementById('lblStatus').textContent = "Result: Accepted"
             </script>
 
@@ -245,7 +279,7 @@
 
             <script>
                 var btn = document.getElementById('btnReject')
-                document.getElementById('btnApprove').style.display = 'none';
+                //  document.getElementById('btnApprove').style.display = 'none';
                 document.getElementById('lblStatus').textContent = "Result: Rejected"
             </script>
         }
@@ -269,6 +303,11 @@
                 setstate(false, btn);
             </script>
         }
+    }
+    else
+    {
+        <script>document.getElementById('response_controls').disabled = false;</script>
+
     }
 
 </body>

@@ -49,7 +49,7 @@ namespace SibiServer.Models
         public string TimeStamp { get; set; }
         [DataColumnName(SibiRequestItemsCols.BudgetLineNo)]
         public string BudgetLineNo { get; set; }
-        [DataColumnName(SibiRequestItemsCols.ChangeType)]
+        [DataColumnName(SibiRequestItemsCols.ModifyStatus)]
         public string ChangeType { get; set; }
         [DataColumnName(SibiRequestItemsCols.ApproverId)]
         public string ApproverId { get; set; }
