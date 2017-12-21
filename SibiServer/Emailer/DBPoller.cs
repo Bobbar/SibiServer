@@ -13,7 +13,7 @@ namespace SibiServer.Emailer
         public static void RequestMonitor()
         {
 
-            int maxloops = 100;
+            int maxloops = 1000;
             int loops = 0;
 
             do

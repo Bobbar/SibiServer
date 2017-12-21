@@ -11,71 +11,49 @@ namespace SibiServer.Emailer
     public static class SMTPMailer
     {
         //private static List<Models.RequestApproval> messageQueue = new List<Models.RequestApproval>();
+
+        //private static string currentServer = "localhost:57456";
+        private static string currentServer = "localhost:57457";
+        //private static string currentServer = "10.10.0.89";
+
         private static List<Notification> messageQueue = new List<Notification>();
-        private static bool mailSent = false;
         private static bool sendingMessage = false;
+
         private static void SendCompletedCallback(object sender, AsyncCompletedEventArgs e)
         {
             // Get the unique identifier for this asynchronous operation.
-            String notificationId = (string)e.UserState;
+            // String notificationId = (string)e.UserState;
+            Notification notification = (Notification)e.UserState;
 
             if (e.Cancelled)
             {
-                Console.WriteLine("[{0}] Send canceled.", notificationId);
+                Console.WriteLine("[{0}] Send canceled.", notification.GUID);
             }
             if (e.Error != null)
             {
-                Console.WriteLine("[{0}] {1}", notificationId, e.Error.ToString());
+                Console.WriteLine("[{0}] {1}", notification.GUID, e.Error.ToString());
             }
             else
             {
                 Console.WriteLine("Message sent.");
-                DBFunctions.SetNotifySent(notificationId);
+                DBFunctions.SetNotifySent(notification);
             }
-            mailSent = true;
             sendingMessage = false;
-            RemoveFromQueue(notificationId);
+            RemoveFromQueue(notification);
             ProcessQueue();
         }
 
-        //public static void SendNewSMTP()
-        //{
-        //    var testAddress = "rblovell@fairfielddd.com";
-        //    var host = "smtp.mail.fairfieldcountyohio.gov";
-
-        //    var client = new SmtpClient(host);
-
-        //    MailAddress from = new MailAddress(testAddress, "Bobby Lovell");
-
-        //    MailAddress to = new MailAddress(testAddress);
-
-        //    MailMessage message = new MailMessage(from, to);
-        //    message.Body = "This is a test message from SMTP...";
-        //    message.Subject = "SMTP Test";
-
-        //    client.SendCompleted += new SendCompletedEventHandler(SendCompletedCallback);
-
-        //    string userState = "1234";
-        //    client.SendAsync(message, userState);
-
-        //    //  message.Dispose();
-
-
-
-
-        //}
         public static void SendNewSMTP(Notification notification)
         {
+            if (notification.Sent) return;
+
             var fromAddress = "noreply@fairfieldcountyohio.gov";
 
             var host = "smtp.mail.fairfieldcountyohio.gov";
             var client = new SmtpClient(host);
 
             MailAddress from = new MailAddress(fromAddress, "Sibi Acquisition Mailer");
-            //MailAddress to = new MailAddress(notification.Approval.Approver.Email);
-            // MailAddressCollection to = SetRecipients(notification);
-
-            MailMessage message = new MailMessage();// (from.ToString(), to);
+            MailMessage message = new MailMessage();
             message.From = from;
             SetRecipients(notification, message);
 
@@ -85,11 +63,12 @@ namespace SibiServer.Emailer
 
             client.SendCompleted += new SendCompletedEventHandler(SendCompletedCallback);
 
-            string userState = notification.GUID;
+            //string userState = notification.GUID;
+            Notification userState = notification;
             sendingMessage = true;
             client.SendAsync(message, userState);
 
-            //  message.Dispose();
+            //message.Dispose();
 
 
 
@@ -98,39 +77,28 @@ namespace SibiServer.Emailer
 
         private static void SetRecipients(Notification notification, MailMessage message)
         {
-            // MailAddressCollection recipients = new MailAddressCollection();
 
             switch (notification.Type)
             {
                 case NotificationType.APPROVAL:
                     message.To.Add(notification.Approver.Email);
-
                     break;
 
                 case NotificationType.ACCEPTED:
                     message.To.Add(notification.Requestor.Email);
                     message.To.Add(notification.Approver.Email);
-
                     break;
 
                 case NotificationType.REJECTED:
                     message.To.Add(notification.Requestor.Email);
                     message.To.Add(notification.Approver.Email);
-
-
                     break;
 
                 case NotificationType.CHANGE:
                     message.To.Add(notification.Approver.Email);
-
-
-
                     break;
 
             }
-            // return recipients;
-
-
         }
 
         private static string GetSubjectText(Notification notification)
@@ -148,10 +116,6 @@ namespace SibiServer.Emailer
 
                 case NotificationType.CHANGE:
                     return "Sibi Request Item Status Change";
-                    //return string.Empty;
-
-                    //TODO: Create a change only/new status message.
-
             }
             return string.Empty;
 
@@ -186,11 +150,9 @@ namespace SibiServer.Emailer
             string bodyHTML = "";
 
             bodyHTML += "<p>" + approval.Approver.FullName + " has accepted the change request for " + approval.SibiRequest.Description + "</p>";
-            bodyHTML += "<p><a href='http://localhost:57456/Sibi/Approval?id=" + approval.GUID + "' target='_blank' rel='noopener'>Click here to view the request.</a></p>";
+            bodyHTML += "<p><a href='http://" + currentServer + "/Sibi/Approval?id=" + approval.GUID + "' target='_blank' rel='noopener'>Click here to view the request.</a></p>";
 
             return bodyHTML;
-
-
         }
 
         private static string RejectBody(Models.RequestApproval approval)
@@ -199,24 +161,21 @@ namespace SibiServer.Emailer
             string bodyHTML = "";
 
             bodyHTML += "<p>" + approval.Approver.FullName + " has REJECTED the change request for " + approval.SibiRequest.Description + "</p>";
-            bodyHTML += "<p><a href='http://localhost:57456/Sibi/Approval?id=" + approval.GUID + "' target='_blank' rel='noopener'>Click here to view the request.</a></p>";
+            bodyHTML += "<p><a href='http://" + currentServer + "/Sibi/Approval?id=" + approval.GUID + "' target='_blank' rel='noopener'>Click here to view the request.</a></p>";
 
             return bodyHTML;
 
         }
-
-
-
+        
         private static string NewApprovalBody(Models.RequestApproval approval)
         {
 
             string bodyHTML = "";
 
             bodyHTML += "<p>You have recieved a new Sibi change approval request.</p>";
-            bodyHTML += "<p><a href='http://localhost:57456/Sibi/Approval?id=" + approval.GUID + "' target='_blank' rel='noopener'>Please click here to view the request.</a></p>";
+            bodyHTML += "<p><a href='http://" + currentServer + "/Sibi/Approval?id=" + approval.GUID + "' target='_blank' rel='noopener'>Please click here to view the request.</a></p>";
 
             return bodyHTML;
-
 
         }
 
@@ -230,7 +189,6 @@ namespace SibiServer.Emailer
 
             return bodyHTML;
 
-
         }
 
         public static void SendNewNotifications(List<Notification> notifications)
@@ -241,18 +199,7 @@ namespace SibiServer.Emailer
             }
 
             ProcessQueue();
-
-
         }
-
-
-        //public static void SendNewApproval(Models.RequestApproval approval)
-        //{
-
-        //    AddToQueue(approval);
-
-        //    ProcessQueue();
-        //}
 
         private static void ProcessQueue()
         {
@@ -263,10 +210,10 @@ namespace SibiServer.Emailer
             Task.Delay(500).Wait();
         }
 
-        private static void RemoveFromQueue(string notificationId)
+        private static void RemoveFromQueue(Notification notification)
         {
-            var removeItem = messageQueue.Find(m => m.GUID == notificationId);
-            messageQueue.Remove(removeItem);
+            //var removeItem = messageQueue.Find(m => m.GUID == notificationId);
+            messageQueue.Remove(notification);
         }
 
         private static void AddToQueue(Notification notification)

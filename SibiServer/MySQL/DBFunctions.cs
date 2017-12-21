@@ -10,7 +10,7 @@ namespace SibiServer
 {
     public static class DBFunctions
     {
-        public static void PopRequestData(ref Models.RequestApproval approval)
+        public static void PopApprovalData(ref Models.RequestApproval approval)
         {
             var approvalQuery = "SELECT * FROM " + approval.TableName + " WHERE " + SibiApprovalColumns.UID + " ='" + approval.GUID + "'";
             approval = new Models.RequestApproval(DBFactory.GetDatabase().DataTableFromQueryString(approvalQuery));
@@ -75,15 +75,16 @@ namespace SibiServer
                             // If the command returned affected rows, return true for a success.
                             if (affectedRows > 0)
                             {
-                                if (SetRequestItemsCurrent(request, trans))
+                                if (!SetRequestItemsCurrent(request, trans))
                                 {
-                                    return true;
+                                    return false;
                                 }
                             }
                         }
                         AddNewNotification(NotificationType.ACCEPTED, trans, request.GUID);
 
                         database.CommitTransaction(trans);
+                        return true;
                     }
                     catch (Exception ex)
                     {
@@ -101,14 +102,14 @@ namespace SibiServer
 
         private static bool SetRequestItemsCurrent(Models.RequestApproval request, DbTransaction transaction)
         {
-            var approvalItemsQuery = "SELECT " + SibiApprovalItemsColumns.RequestItemUID + " WHERE " + SibiApprovalItemsColumns.ApprovalUID + " = '" + request.GUID + "'";
+            var approvalItemsQuery = "SELECT " + SibiApprovalItemsColumns.RequestItemUID + " FROM " + SibiApprovalItemsColumns.TableName + " WHERE " + SibiApprovalItemsColumns.ApprovalUID + " = '" + request.GUID + "'";
 
             using (var approvalItems = DBFactory.GetDatabase().DataTableFromQueryString(approvalItemsQuery))
             {
                 int affectedRows = 0;
                 foreach (DataRow item in approvalItems.Rows)
                 {
-                    var itemsQry = "UPDATE " + request.TableName +
+                    var itemsQry = "UPDATE " + SibiRequestItemsCols.TableName +
                " SET " + SibiRequestItemsCols.ModifyStatus + " ='" + ItemChangeStatus.MODCURR.ToString() + "' WHERE " + SibiRequestItemsCols.ItemUID + " = '" + item[SibiApprovalItemsColumns.RequestItemUID] + "'";
 
                     using (var cmd = DBFactory.GetDatabase().GetCommand(itemsQry))
@@ -160,13 +161,14 @@ namespace SibiServer
                         {
                             int affectedRows = database.ExecuteQuery(cmd, trans);
                             // If the command returned affected rows, return true for a success.
-                            if (affectedRows > 0)
+                            if (affectedRows < 1)
                             {
-                                return true;
+                                return false;
                             }
                         }
                         AddNewNotification(NotificationType.REJECTED, trans, request.GUID);
                         database.CommitTransaction(trans);
+                        return true;
                     }
                     catch (Exception ex)
                     {
@@ -189,12 +191,13 @@ namespace SibiServer
         //    Console.WriteLine(affectedRows.ToString());
         //}
 
-        public static void SetNotifySent(string notificationId)
+        public static void SetNotifySent(Emailer.Notification notification)
         {
-            var setSentQuery = "UPDATE " + NotificationColumns.TableName + " SET " + NotificationColumns.Sent + " = '1' WHERE " + NotificationColumns.UID + " = '" + notificationId + "'";
-
+            notification.Sent = true;
+            var setSentQuery = "UPDATE " + NotificationColumns.TableName + " SET " + NotificationColumns.Sent + " = '1' WHERE " + NotificationColumns.UID + " = '" + notification.GUID + "'";
             int affectedRows = DBFactory.GetDatabase().ExecuteQuery(setSentQuery);
-           // Console.WriteLine(affectedRows.ToString());
+
+            // Console.WriteLine(affectedRows.ToString());
         }
 
 

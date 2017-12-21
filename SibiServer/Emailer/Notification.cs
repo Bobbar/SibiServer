@@ -88,6 +88,8 @@ namespace SibiServer.Emailer
         }
         private string requestItemId;
 
+        [DataColumnName(NotificationColumns.Sent)]
+        public bool Sent { get; set; }
 
 
         public Models.User Approver
@@ -142,8 +144,11 @@ namespace SibiServer.Emailer
 
         private void PopulateApproval(string approvalId)
         {
-            var approvalQuery = "SELECT * FROM " + SibiApprovalColumns.TableName + " WHERE " + SibiApprovalColumns.UID + " ='" + approvalId + "'";
-            this.Approval = new Models.RequestApproval(DBFactory.GetDatabase().DataTableFromQueryString(approvalQuery));
+            //var approvalQuery = "SELECT * FROM " + SibiApprovalColumns.TableName + " WHERE " + SibiApprovalColumns.UID + " ='" + approvalId + "'";
+            //this.Approval = new Models.RequestApproval(DBFactory.GetDatabase().DataTableFromQueryString(approvalQuery));
+            var newApproval = new Models.RequestApproval(approvalId);
+            DBFunctions.PopApprovalData(ref newApproval);
+            this.Approval = newApproval;
         }
 
         private void PopulateRequestItem(string requestItemId)

@@ -35,7 +35,7 @@ namespace SibiServer
             Models.RequestApproval approval = new Models.RequestApproval(id);
             //MySQLCommsOLD sqlContext = HttpContext.RequestServices.GetService(typeof(MySQLCommsOLD)) as MySQLCommsOLD;
             //sqlContext.PopRequestData(approval);
-            DBFunctions.PopRequestData(ref approval);
+            DBFunctions.PopApprovalData(ref approval);
 
             return View(approval);
         }
@@ -50,14 +50,14 @@ namespace SibiServer
 
             if (response == "accept")
             {
-                DBFunctions.PopRequestData(ref r);
+                DBFunctions.PopApprovalData(ref r);
                 bool success = DBFunctions.ApproveRequest(r);//sqlContext.ApproveRequest(r.GUID);
                 r.PostSuccess = success;
                 return View(r);
             }
             else if (response == "reject")
             {
-                DBFunctions.PopRequestData(ref r);
+                DBFunctions.PopApprovalData(ref r);
                 bool success = DBFunctions.RejectRequest(r);//sqlContext.ApproveRequest(r.GUID);
                 r.PostSuccess = success;
                 return View(r);
