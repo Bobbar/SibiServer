@@ -13,7 +13,7 @@ namespace SibiServer
     {
         #region Fields
 
-        private DataTable populatingTable;
+       // private DataTable populatingTable;
 
         #endregion Fields
 
@@ -24,18 +24,21 @@ namespace SibiServer
         /// <summary>
         /// DataTable that was used to populate this object.
         /// </summary>
-        public DataTable PopulatingTable
-        {
-            get
-            {
-                return populatingTable;
-            }
-            set
-            {
-                populatingTable = value;
-                populatingTable.TableName = TableName;
-            }
-        }
+        //public DataTable PopulatingTable
+        //{
+        //    get
+        //    {
+        //        return populatingTable;
+        //    }
+        //    set
+        //    {
+        //        if (value != null)
+        //        {
+        //            populatingTable = value;
+        //            populatingTable.TableName = TableName;
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// Database Tablename for implementing object.
@@ -53,16 +56,16 @@ namespace SibiServer
         public DataMapObject(DataTable data)
         {
             var row = ((DataTable)data).Rows[0];
-            populatingTable = data;
-            populatingTable.TableName = TableName;
+            //populatingTable = data;
+            //populatingTable.TableName = TableName;
             MapProperty(this, row);
         }
 
         public DataMapObject(DataRow data)
         {
             var row = data;
-            populatingTable = row.Table;
-            populatingTable.TableName = TableName;
+            //populatingTable = row.Table;
+            //populatingTable.TableName = TableName;
             MapProperty(this, row);
         }
 
@@ -73,8 +76,8 @@ namespace SibiServer
         public void MapClassProperties(DataTable data)
         {
             var row = ((DataTable)data).Rows[0];
-            populatingTable = row.Table;
-            populatingTable.TableName = TableName;
+            //populatingTable = row.Table;
+            //populatingTable.TableName = TableName;
             MapProperty(this, row);
         }
 
@@ -92,6 +95,7 @@ namespace SibiServer
 
             foreach (System.Reflection.PropertyInfo prop in Props)
             {
+               
                 //Check if the property contains a target attribute.
 
                 if (prop.GetCustomAttributes(typeof(DataColumnNameAttribute), true).Length > 0)
@@ -131,7 +135,7 @@ namespace SibiServer
                         }
                         else if (prop.PropertyType == typeof(byte[]))
                         {
-                            prop.SetValue(obj,row[propColumn]);
+                            prop.SetValue(obj, row[propColumn]);
                         }
                         else
                         {
@@ -155,6 +159,17 @@ namespace SibiServer
             }
         }
 
+        private void MapToDataRow(DataRow row, object obj)
+        {
+
+
+
+
+
+
+
+        }
+
         #region IDisposable Support
 
         private bool disposedValue = false; // To detect redundant calls
@@ -175,7 +190,7 @@ namespace SibiServer
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects).
-                    PopulatingTable.Dispose();
+                    //PopulatingTable.Dispose();
                 }
 
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.

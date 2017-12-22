@@ -1,0 +1,21 @@
+﻿@model SibiServer.Models.RequestApproval
+
+<table class="table table-condensed table-bordered">
+    <h3>Approval</h3>
+    <thead style="background-color:#ffd789">
+        <tr>
+            <th>Status</th>
+            <th>Approver</th>
+            <th>Requestor</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody style="color:black">
+        <tr style="background-color:lightgray">
+            <td>@Model.ApprovalStatus</td>
+            <td>@Model.Approver.FullName</td>
+            <td>@Model.Requestor.FullName</td>
+            <td>@Model.DateStamp</td>
+        </tr>
+    </tbody>
+</table>

@@ -86,9 +86,13 @@ namespace SibiServer.Models
             }
         }
 
+        [DataColumnName(SibiApprovalColumns.Timestamp)]
+        public DateTime DateStamp { get; set; }
+
         public User Approver { get; set; } = new User();
         public User Requestor { get; set; } = new User();
 
+        public string ApprovalResponse { get; set; }
 
         public bool PostSuccess { get; set; }
 

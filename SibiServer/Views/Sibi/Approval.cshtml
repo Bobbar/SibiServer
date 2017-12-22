@@ -4,6 +4,7 @@
     Layout = "_NavbarNew";
     ViewData["Title"] = "Approval";
     // ViewData["ApprovalObject"] = Model;
+
 }
 
 @*<h2>Index</h2>
@@ -25,47 +26,53 @@
         <link rel="stylesheet" type="text/css" href="~/css/component.css" />*@
     @*<link rel="stylesheet" type="text/css" href="~/css/cssreset.css" />*@
     @*<script src="js/modernizr.custom.js"></script>*@
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/Microsoft.jQuery.Unobtrusive.Ajax/jquery.unobtrusive-ajax.min.js"></script>
+
 </head>
 <body>
 
-    @if (ViewData["state"].ToString() == "posted")
-    {
-        @if (Model.PostSuccess)
-        {
-            <div class="container">
-                <div class="alert alert-success alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <strong>Success!</strong> The approval has been updated.
-                </div>
-            </div>
-
-        }
-        else
-        {
-
-            <div class="container">
-                <div class="alert alert-danger alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <strong>ERROR!</strong> Something went wrong...
-                </div>
-            </div>
-        }
-    }
 
 
 
     <div class="container">
-    
 
-        @using (Html.BeginForm("Approval", "Sibi", FormMethod.Post))
-        {
-            @*<div class="form-group">*@
+
+
+
+        <div id="alertSuccess" class="alert alert-success alert-dismissible collapse" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>Success!</strong> The approval has been updated.
+        </div>
+
+
+        <div id="alertError" class="alert alert-danger alert-dismissible collapse" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>ERROR!</strong> Something went wrong...
+        </div>
+
+
+
+
+
+        <form asp-controller="Sibi" asp-action="Approval"
+              data-ajax-begin="onBegin" data-ajax-complete="onComplete"
+              data-ajax-failure="onFailed" data-ajax-success="onSuccess"
+              data-ajax="true" method="POST">
 
             <div class="list-group">
+
+                <a class="list-group-item">
+                    <div id="approvalTable">
+                        @Html.Partial("RequestPartial", Model)
+                    </div>
+                </a>
+
+
                 <a class="list-group-item">
                     <table class="table table-condensed table-bordered">
                         <h3>Sibi Request Info</h3>
@@ -117,19 +124,19 @@
                         </thead>
                         <tbody style="color:black">
                             @foreach (var item in Model.ApprovalItems)
-                            {
-                                <tr style="background-color:lightgray">
-                                    <td>@Attributes.SibiAttributes[item.NewItemValues.ChangeType]</td>
-                                    <td>@item.NewItemValues.Description</td>
-                                    <td>@item.NewItemValues.User</td>
-                                    <td>@item.NewItemValues.Qty</td>
-                                    <td>@Attributes.SibiAttributes[item.NewItemValues.Location]</td>
-                                    <td>@item.NewItemValues.ReplaceAsset</td>
-                                    <td>@item.NewItemValues.ReplaceSerial</td>
-                                    <td>@item.NewItemValues.OrgCode</td>
-                                    <td>@item.NewItemValues.ObjCode</td>
-                                </tr>
-                            }
+                {
+                    <tr style="background-color:lightgray">
+                        <td>@Attributes.SibiAttributes[item.NewItemValues.ChangeType]</td>
+                        <td>@item.NewItemValues.Description</td>
+                        <td>@item.NewItemValues.User</td>
+                        <td>@item.NewItemValues.Qty</td>
+                        <td>@Attributes.SibiAttributes[item.NewItemValues.Location]</td>
+                        <td>@item.NewItemValues.ReplaceAsset</td>
+                        <td>@item.NewItemValues.ReplaceSerial</td>
+                        <td>@item.NewItemValues.OrgCode</td>
+                        <td>@item.NewItemValues.ObjCode</td>
+                    </tr>
+    }
                         </tbody>
                     </table>
                 </a>
@@ -154,62 +161,195 @@
                         </thead>
                         <tbody style="color:black">
                             @foreach (var item in Model.ApprovalItems)
-                            {
-                                <tr style="background-color:lightgray">
-                                    <td>@Attributes.SibiAttributes[item.OldItemValues.ChangeType]</td>
-                                    <td>@item.OldItemValues.Description</td>
-                                    <td>@item.OldItemValues.User</td>
-                                    <td>@item.OldItemValues.Qty</td>
-                                    <td>@Attributes.SibiAttributes[item.OldItemValues.Location]</td>
-                                    <td>@item.OldItemValues.ReplaceAsset</td>
-                                    <td>@item.OldItemValues.ReplaceSerial</td>
-                                    <td>@item.OldItemValues.OrgCode</td>
-                                    <td>@item.OldItemValues.ObjCode</td>
-                                </tr>
-                            }
+                {
+                    <tr style="background-color:lightgray">
+                        <td>@Attributes.SibiAttributes[item.OldItemValues.ChangeType]</td>
+                        <td>@item.OldItemValues.Description</td>
+                        <td>@item.OldItemValues.User</td>
+                        <td>@item.OldItemValues.Qty</td>
+                        <td>@Attributes.SibiAttributes[item.OldItemValues.Location]</td>
+                        <td>@item.OldItemValues.ReplaceAsset</td>
+                        <td>@item.OldItemValues.ReplaceSerial</td>
+                        <td>@item.OldItemValues.OrgCode</td>
+                        <td>@item.OldItemValues.ObjCode</td>
+                    </tr>
+    }
                         </tbody>
                     </table>
 
                 </a>
-                @*@Html.HiddenFor(m => m.Note)*@
+               
                 @Html.HiddenFor(m => m.GUID)
                 @Html.HiddenFor(m => m.PostSuccess)
             </div>
             @*</div>*@
 
-            <form class="form-inline">
+            @*<form class="form-inline">*@
 
 
-                <fieldset id="response_controls">
+            <fieldset id="response_controls">
 
-                    <div class="form-group">
-                        <label>Note:</label>
-                        @Html.TextAreaFor(m => m.Note, new { @class = "form-control", @rows = "5" })
-                    </div>
+                <div class="form-group">
+                    <label>Note:</label>
+                    @Html.TextAreaFor(m => m.Note, new { @class = "form-control", @rows = "5" })
+                    @*@Html.HiddenFor(m => m.Note)*@
+                </div>
 
-                    <div class="btn-group-lg">
+                <div class="btn-group-lg">
 
-                        <button class="btn btn-primary btn-lg" style="background-color:#b2ffb4;color:#565656" name="response" value="accept" type="submit" id="btnApprove">Accept</button>
+                    <button id="btnAjaxAccept" class="btn btn-primary btn-lg" style="background-color:#b2ffb4;color:#565656" type="button">Accept</button>
 
-                        <button class="btn btn-primary btn-lg" style="background-color:#ffb2b2;color:#565656" name="response" value="reject" type="submit" id="btnReject">Reject</button>
-                    </div>
-                </fieldset>
-            </form>
+                    <button id="btnAjaxReject" class="btn btn-primary btn-lg" style="background-color:#ffb2b2;color:#565656" type="button">Reject</button>
+                </div>
+            </fieldset>
+            @*</form>*@
+
+        </form>
+        <section>
+            <p>
+                <label id="lblStatus" style="color:black"></label>
+            </p>
+
+        </section>
+        @*}*@
 
 
-            <section>
-                <p>
-                    <label id="lblStatus" style="color:black"></label>
-                </p>
 
-            </section>
-        }
+
+
+
+
+        @*<input id="btnAjaxSubmit" class="btn btn-primary btn-lg" type="submit" name="response" value="accept" />
+            <input id="btnAjaxReject" class="btn btn-primary btn-lg" type="submit" name="response" value="reject" />*@
+
 
 
 
 
 
     </div><!-- /container -->
+
+
+    <script type="text/javascript">
+
+
+
+        function postToController(data, dataType, url) {
+            url = url || '/Sibi/Submit';
+            console.log('Submitting form...');
+            $.ajax({
+                type: 'POST',
+                url: url,
+                dataType: 'json',
+                contentType: dataType,
+                data: data,
+                success: function (result) {
+                    console.log('Data received: ');
+                    console.log(result);
+                    console.log("Post= " + result["postSuccess"]);
+                    document.getElementById('response_controls').disabled = true;
+                    displayAlert(result["postSuccess"]);
+                    updateApprovalStatus(result["guid"]);
+
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+
+        }
+
+        function updateApprovalStatus(approvalGuid) {
+             $.ajax({
+                url: '@Url.Action("GetApprovalData", "Sibi")',
+                data: { approvalId: approvalGuid },
+                dataType: 'html',
+                type: 'GET',
+                cache: false,
+                success: function (data) {
+                    $('#approvalTable').html(data);
+                },
+                error: function (data) {
+                    alert('Error occurred');
+                }
+             });
+
+        }
+
+        function displayAlert(success) {
+            if (success) {
+                $('#alertSuccess').show();
+             }
+            else {
+                $('#alertError').show();
+             }
+
+        }
+
+        function getFormDataAsJson() {
+
+             @*console.log(@Html.ValueFor(m => m.Note));
+             var jsonModel = @Html.Raw(Json.Serialize(Model));
+             jsonModel["approvalItems"] = null;
+             return jsonModel;*@
+
+             return {
+                 '@Html.IdFor(x => x.GUID)': $('#@Html.IdFor(x=>x.GUID)').val(),
+                 '@Html.IdFor(x => x.Note)': $('#@Html.IdFor(x=>x.Note)').val()
+             }
+        }
+
+
+         $('#btnAjaxAccept').click(function () {
+
+
+            var data = getFormDataAsJson();
+
+            console.log(data);
+            postToController(JSON.stringify(data), "application/json; charset=utf-8", '/Sibi/Approve');
+
+            return false;
+        });
+
+         $('#btnAjaxReject').click(function () {
+
+
+             var data = getFormDataAsJson();
+             console.log(data);
+
+             //postToController(JSON.stringify(data), "application/json; charset=utf-8", '/Sibi/Reject');
+             postToController(JSON.stringify(data), "application/json; charset=utf-8", '/Sibi/Reject');
+             return false;
+         });
+
+
+
+
+
+        //var results = $("#Results");
+        //var onBegin = function () {
+        //    console.log("onBegin");
+        //    results.html("<img src=\"~/images/sibi_logo.png\" alt=\"Something...\"/>");
+        //}
+
+        //var onComplete = function () {
+        //    console.log("onComplete");
+        //    results.html("");
+        //};
+
+        //var onSuccess = function (context) {
+        //    console.log("onSuccess");
+        //    alert(context);
+        //};
+
+        //var onFailed = function (context) {
+        //    console.log("onFailed");
+        //    alert("Failed");
+        //};
+
+
+    </script>
+
 
     <script src="~/js/classie.js"></script>
     <script>
@@ -221,7 +361,7 @@
 
 
             if (suc) {
-               // btn.textContent = "SUCCESS!";
+                // btn.textContent = "SUCCESS!";
 
                 //activatedClass = 'btn-success3d';
                 //console.log(btn);
@@ -239,8 +379,8 @@
             }
             else {
                 document.getElementById('lblStatus').textContent = "Result: ERROR";
-               // btn.textContent = "ERROR!";
-               // btn.getElementById.style.backgroundColor = '#ff6868';
+                // btn.textContent = "ERROR!";
+                // btn.getElementById.style.backgroundColor = '#ff6868';
                 //activatedClass = "btn-error3d";
                 //if (!classie.has(btn, activatedClass)) {
                 //    //classie.add(btn, activatedClass);

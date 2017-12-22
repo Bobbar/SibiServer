@@ -36,17 +36,21 @@ namespace SibiServer
             //MySQLCommsOLD sqlContext = HttpContext.RequestServices.GetService(typeof(MySQLCommsOLD)) as MySQLCommsOLD;
             //sqlContext.PopRequestData(approval);
             DBFunctions.PopApprovalData(ref approval);
+            approval.ApprovalResponse = "none";
 
             return View(approval);
         }
 
         [HttpPost]
-        public ActionResult Approval(Models.RequestApproval r, string response)
+        public ActionResult Approval(Models.RequestApproval r)
         {
+            
+            var response = r.ApprovalResponse;
             Console.WriteLine("Approve CLicked!  " + response);
             ViewData["state"] = "posted";
             ViewData["response"] = response;
-          //  ViewBag.Approval = r;
+            //  ViewBag.Approval = r;
+
 
             if (response == "accept")
             {
@@ -64,7 +68,47 @@ namespace SibiServer
             }
             return View(r);
 
-           
+
+        }
+
+        [HttpPost]
+        public IActionResult Approve([FromBody] Models.RequestApproval r)
+        {
+           //TODO: Create method within DataMapObject to update database with current object values.
+            ViewData["state"] = "posted";
+            ViewData["response"] = "accept";
+            DBFunctions.PopApprovalData(ref r);
+            bool success = DBFunctions.ApproveRequest(r);
+            r.PostSuccess = success;
+            return Json(r);
+
+
+        }
+
+
+        [HttpPost]
+        public IActionResult Reject([FromBody] Models.RequestApproval r)
+        {
+            
+            ViewData["state"] = "posted";
+            ViewData["response"] = "reject";
+            DBFunctions.PopApprovalData(ref r);
+            bool success = DBFunctions.RejectRequest(r);//sqlContext.ApproveRequest(r.GUID);
+            r.PostSuccess = success;
+            return Json(r);
+
+
+            // return Json(r);
+        }
+
+        [HttpGet]
+        public PartialViewResult GetApprovalData(string approvalId)
+        {
+            var approval = new Models.RequestApproval(approvalId);
+            DBFunctions.PopApprovalData(ref approval);
+
+            return PartialView("RequestPartial",approval);
+
         }
 
         public IActionResult MyApprovals(Models.RequestApproval r, string approverId)
