@@ -44,7 +44,7 @@ namespace SibiServer
         [HttpPost]
         public ActionResult Approval(Models.RequestApproval r)
         {
-            
+
             var response = r.ApprovalResponse;
             Console.WriteLine("Approve CLicked!  " + response);
             ViewData["state"] = "posted";
@@ -74,14 +74,16 @@ namespace SibiServer
         [HttpPost]
         public IActionResult Approve([FromBody] Models.RequestApproval r)
         {
-           //TODO: Create method within DataMapObject to update database with current object values.
+            //TODO: Create method within DataMapObject to update database with current object values.
             ViewData["state"] = "posted";
             ViewData["response"] = "accept";
-            DBFunctions.PopApprovalData(ref r);
-            bool success = DBFunctions.ApproveRequest(r);
-            r.PostSuccess = success;
-            return Json(r);
 
+            var postApproval = new Models.RequestApproval(r.GUID);
+            DBFunctions.PopApprovalData(ref postApproval);
+            postApproval.Note = r.Note;
+            bool success = DBFunctions.ApproveRequest(postApproval);
+            postApproval.PostSuccess = success;
+            return Json(postApproval);
 
         }
 
@@ -89,16 +91,18 @@ namespace SibiServer
         [HttpPost]
         public IActionResult Reject([FromBody] Models.RequestApproval r)
         {
-            
+
             ViewData["state"] = "posted";
             ViewData["response"] = "reject";
-            DBFunctions.PopApprovalData(ref r);
-            bool success = DBFunctions.RejectRequest(r);//sqlContext.ApproveRequest(r.GUID);
-            r.PostSuccess = success;
-            return Json(r);
 
+            var postApproval = new Models.RequestApproval(r.GUID);
+            DBFunctions.PopApprovalData(ref postApproval);
+            postApproval.Note = r.Note;
+            bool success = DBFunctions.RejectRequest(postApproval);
+            postApproval.PostSuccess = success;
+            return Json(postApproval);
+                     
 
-            // return Json(r);
         }
 
         [HttpGet]
@@ -107,7 +111,7 @@ namespace SibiServer
             var approval = new Models.RequestApproval(approvalId);
             DBFunctions.PopApprovalData(ref approval);
 
-            return PartialView("RequestPartial",approval);
+            return PartialView("RequestPartial", approval);
 
         }
 

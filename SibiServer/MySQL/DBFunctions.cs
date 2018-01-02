@@ -66,21 +66,19 @@ namespace SibiServer
                     try
                     {
 
-                        var approveQry = "UPDATE " + request.TableName + " SET " + SibiApprovalColumns.Status + " ='" + ApprovalStatus.approved.ToString() + "' WHERE " + SibiApprovalColumns.UID + " ='" + request.GUID + "'";
-                        using (var cmd = database.GetCommand(approveQry))
-                        {
 
-                            // int affectedRows = DBFactory.GetDatabase().ExecuteQuery(approveQry);
-                            int affectedRows = database.ExecuteQuery(cmd, trans);
-                            // If the command returned affected rows, return true for a success.
-                            if (affectedRows > 0)
+                        request.ApprovalStatus = ApprovalStatus.approved.ToString();
+
+                        int affectedRows = request.Update(trans);
+
+                        if (affectedRows > 0)
+                        {
+                            if (!SetRequestItemsCurrent(request, trans))
                             {
-                                if (!SetRequestItemsCurrent(request, trans))
-                                {
-                                    return false;
-                                }
+                                return false;
                             }
                         }
+
                         AddNewNotification(NotificationType.ACCEPTED, trans, request.GUID);
 
                         database.CommitTransaction(trans);
@@ -156,16 +154,14 @@ namespace SibiServer
                 {
                     try
                     {
-                        var approveQry = "UPDATE " + request.TableName + " SET " + SibiApprovalColumns.Status + " ='" + ApprovalStatus.rejected.ToString() + "' WHERE " + SibiApprovalColumns.UID + " ='" + request.GUID + "'";
-                        using (var cmd = database.GetCommand(approveQry))
+                        request.ApprovalStatus = ApprovalStatus.rejected.ToString();
+
+                        int affectedRows = request.Update(trans);
+                        if (affectedRows < 1)
                         {
-                            int affectedRows = database.ExecuteQuery(cmd, trans);
-                            // If the command returned affected rows, return true for a success.
-                            if (affectedRows < 1)
-                            {
-                                return false;
-                            }
+                            return false;
                         }
+
                         AddNewNotification(NotificationType.REJECTED, trans, request.GUID);
                         database.CommitTransaction(trans);
                         return true;

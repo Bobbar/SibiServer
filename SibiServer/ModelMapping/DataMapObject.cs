@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 
 namespace SibiServer
 {
@@ -13,7 +14,7 @@ namespace SibiServer
     {
         #region Fields
 
-       // private DataTable populatingTable;
+        // private DataTable populatingTable;
 
         #endregion Fields
 
@@ -92,23 +93,19 @@ namespace SibiServer
             List<System.Reflection.PropertyInfo> Props = (obj.GetType().GetProperties().ToList());
 
             //Iterate through the properties.
-
             foreach (System.Reflection.PropertyInfo prop in Props)
             {
-               
-                //Check if the property contains a target attribute.
 
+                //Check if the property contains a target attribute.
                 if (prop.GetCustomAttributes(typeof(DataColumnNameAttribute), true).Length > 0)
                 {
                     //Get the column name attached to the property.
                     var propColumn = ((DataColumnNameAttribute)prop.GetCustomAttributes(false)[0]).ColumnName;
 
                     //Make sure the DataTable contains a matching column name.
-
                     if (row.Table.Columns.Contains(propColumn))
                     {
                         //Check the type of the propery and set its value accordingly.
-
                         if (prop.PropertyType == typeof(string))
                         {
                             prop.SetValue(obj, row[propColumn].ToString(), null);
@@ -159,15 +156,103 @@ namespace SibiServer
             }
         }
 
+        /// <summary>
+        /// Updates the database with this objects current values.
+        /// </summary>
+        /// <param name="transaction"></param>
+        /// <returns></returns>
+        public int Update(System.Data.Common.DbTransaction transaction = null)
+        {
+            // Get the DataColumnAttribute for the GUID property.
+            var GUIDattribs = this.GetType().GetProperty(nameof(this.GUID)).GetCustomAttributes(typeof(DataColumnNameAttribute), true);
+
+            // Cast out the column name.
+            var GUIDColumn = ((DataColumnNameAttribute)GUIDattribs[0]).ColumnName;
+
+            // Build query to select the current DB data for this object.
+            var objectSelectQuery = "SELECT * FROM " + this.TableName + " WHERE " + GUIDColumn + " = '" + this.GUID + "'";
+
+            // Get the current DB data table.
+            var updateTable = DBFactory.GetDatabase().DataTableFromQueryString(objectSelectQuery);
+
+            // Map the current object data to the data row.
+            MapToDataRow(updateTable.Rows[0], this);
+
+            // Update the database with the new table data.
+            var affectedRows = DBFactory.GetDatabase().UpdateTable(objectSelectQuery, updateTable, transaction);
+
+            // Return the rows affected.
+            return affectedRows;
+
+        }
+
+
         private void MapToDataRow(DataRow row, object obj)
         {
 
+            //Collect list of all properties in the object class.
+            List<System.Reflection.PropertyInfo> Props = (obj.GetType().GetProperties().ToList());
+
+            //Iterate through the properties.
+            foreach (System.Reflection.PropertyInfo prop in Props)
+            {
+
+                //Check if the property contains a target attribute.
+                if (prop.GetCustomAttributes(typeof(DataColumnNameAttribute), true).Length > 0)
+                {
+                    //Get the column name attached to the property.
+                    var propColumn = ((DataColumnNameAttribute)prop.GetCustomAttributes(false)[0]).ColumnName;
+
+                    //Make sure the DataTable contains a matching column name.
+                    if (row.Table.Columns.Contains(propColumn))
+                    {
 
 
+                        row[propColumn] = prop.GetValue(obj);
 
 
+                        ////Check the type of the propery and set its value accordingly.
+                        //if (prop.PropertyType == typeof(string))
+                        //{
+                        //    row[propColumn] = prop.GetValue(obj).ToString();
 
+                        //   // prop.SetValue(obj, row[propColumn].ToString(), null);
+                        //}
+                        //else if (prop.PropertyType == typeof(DateTime))
+                        //{
+                        //    DateTime pDate = default(DateTime);
+                        //    if (DateTime.TryParse(DataConsistency.NoNull(row[propColumn].ToString()), out pDate))
+                        //    {
+                        //        prop.SetValue(obj, pDate);
+                        //    }
+                        //    else
+                        //    {
+                        //        prop.SetValue(obj, null);
+                        //    }
+                        //}
+                        //else if (prop.PropertyType == typeof(bool))
+                        //{
+                        //    prop.SetValue(obj, Convert.ToBoolean(row[propColumn]));
+                        //}
+                        //else if (prop.PropertyType == typeof(int))
+                        //{
+                        //    prop.SetValue(obj, Convert.ToInt32(row[propColumn]));
+                        //}
+                        //else if (prop.PropertyType == typeof(byte[]))
+                        //{
+                        //    prop.SetValue(obj, row[propColumn]);
+                        //}
+                        //else
+                        //{
+                        //    //Throw an error if type is unexpected.
+                        //    Debug.Print(prop.PropertyType.ToString());
+                        //    throw new Exception("Unexpected property type.");
+                        //}
+                    }
 
+                }
+
+            }
         }
 
         #region IDisposable Support
