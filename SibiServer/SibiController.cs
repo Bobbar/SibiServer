@@ -30,9 +30,9 @@ namespace SibiServer
         public IActionResult Approval(string id)
         {
 
-
-          
             
+
+            //TempData["UserID"] = "rl12184";
 
             ViewData["id"] = id;
             ViewData["state"] = "prepost";
@@ -41,7 +41,9 @@ namespace SibiServer
             //sqlContext.PopRequestData(approval);
             DBFunctions.PopApprovalData(ref approval);
             approval.ApprovalResponse = "none";
-
+            //TempData["UserId"] = approval.Approver.UserName;
+            ViewBag.UserName = approval.Approver.UserName;
+            ViewBag.UserID = approval.Approver.GUID;
             return View(approval);
         }
 
@@ -121,8 +123,12 @@ namespace SibiServer
 
         public IActionResult MyApprovals(Models.RequestApproval r, string approverId)
         {
+            var currentUser = new Models.User(approverId);
+            ViewBag.UserName = currentUser.UserName;
+            ViewBag.UserID = currentUser.GUID;
+
             //var m = (Models.RequestApproval)ViewBag.Approval;
-            Console.WriteLine(r.ApproverID);
+            // Console.WriteLine(ViewBag.UserID);
             ViewBag.ApprovalsTable = DBFunctions.GetApprovalsTable(approverId);
             return View(r);
         }

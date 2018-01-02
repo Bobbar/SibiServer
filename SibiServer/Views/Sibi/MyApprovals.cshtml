@@ -4,7 +4,7 @@
 
 @{
     ViewData["Title"] = "MyApprovals";
-    Layout = "_Navbar";
+    Layout = "_NavbarNew";
     DataTable approvalsTable = (DataTable)ViewBag.ApprovalsTable;
 }
 
@@ -19,71 +19,80 @@
         <meta name="keywords" content="button styles, css3, modern, flat button, subtle, effects, hover, web design" />
         <meta name="author" content="Codrops" />*@
     @*<link rel="shortcut icon" href="../favicon.ico">*@
-    <link rel="stylesheet" type="text/css" href="~/css/default.css" />
-    <link rel="stylesheet" type="text/css" href="~/css/component.css" />
+    @*<link rel="stylesheet" type="text/css" href="~/css/default.css" />
+        <link rel="stylesheet" type="text/css" href="~/css/component.css" />*@
     @*<link rel="stylesheet" type="text/css" href="~/css/cssreset.css" />*@
     @*<script src="js/modernizr.custom.js"></script>*@
-</head>
 
-@*<p>
-        <a asp-action="Create">Create New</a>
-    </p>*@
-<table class="table">
-    <thead>
-        <tr>
-            <th>Timestamp</th>
-            <th>Status</th>
-            <th>Approval GUID</th>
-            <th>Sibi Request GUID</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (DataRow row in approvalsTable.Rows)
-        {
-        <tr>
-            <td>
-                @row[SibiApprovalColumns.Timestamp].ToString()
-            </td>
-            <td>
-                @row[SibiApprovalColumns.Status].ToString()
-            </td>
-            <td>
-                @row[SibiApprovalColumns.UID].ToString()
-            </td>
-            <td>
-                @row[SibiApprovalColumns.RequestUID].ToString()
-            </td>
-            @*<td>
-            @Html.DisplayFor(modelItem => item.GUID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Note)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ApprovalSent)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ApprovalStatus)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SibiRequestUID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ApproverID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RequestorID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PostSuccess)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>*@
-        </tr>
-        }
-    </tbody>
-</table>
+
+</head>
+<body>
+    @*<p>
+            <a asp-action="Create">Create New</a>
+        </p>*@
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Status</th>
+                    <th>Approval GUID</th>
+                    <th>Sibi Request GUID</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (DataRow row in approvalsTable.Rows)
+                {
+                    <tr>
+                        <td>
+                            @row[SibiApprovalColumns.Timestamp].ToString()
+                        </td>
+                        <td>
+                            @row[SibiApprovalColumns.Status].ToString()
+                        </td>
+                        <td>
+                            @row[SibiApprovalColumns.UID].ToString()
+                        </td>
+                        <td>
+                            @row[SibiApprovalColumns.RequestUID].ToString()
+                        </td>
+                        <td>
+                            <a class="btn btn-default" href="@Url.Action("Approval","Sibi",new { id = @row[SibiApprovalColumns.UID].ToString() })">View</a>
+                        </td>
+                        @*<td>
+                                @Html.DisplayFor(modelItem => item.GUID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Note)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ApprovalSent)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ApprovalStatus)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SibiRequestUID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ApproverID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RequestorID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PostSuccess)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                            </td>*@
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
 </html>

@@ -9,7 +9,19 @@ namespace SibiServer
 {
     public static class Attributes
     {
-        public static Dictionary<string, string> SibiAttributes = new Dictionary<string, string>();
+        private static Dictionary<string, string> SibiAttributes = new Dictionary<string, string>();
+
+        public static string GetSibiAttribute(string attribId)
+        {
+            if (SibiAttributes.ContainsKey(attribId))
+            {
+                return SibiAttributes[attribId];
+            }
+            else
+            {
+                return attribId;
+            }
+        }
 
         public static void PopulateAttributes()
         {

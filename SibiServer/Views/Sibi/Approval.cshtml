@@ -90,8 +90,8 @@
                         <tbody style="color:black">
                             <tr style="background-color:lightgray">
                                 <td>@Model.SibiRequest.Description</td>
-                                <td>@Attributes.SibiAttributes[Model.SibiRequest.RequestType]</td>
-                                <td>@Attributes.SibiAttributes[Model.SibiRequest.Status]</td>
+                                <td>@Attributes.GetSibiAttribute(Model.SibiRequest.RequestType)</td>
+                                <td>@Attributes.GetSibiAttribute(Model.SibiRequest.Status)</td>
                                 <td>@Model.SibiRequest.NeedByDate</td>
                                 <td>@Model.SibiRequest.PO</td>
                                 <td>@Model.SibiRequest.RequisitionNumber</td>
@@ -126,11 +126,11 @@
                             @foreach (var item in Model.ApprovalItems)
                             {
                                 <tr style="background-color:lightgray">
-                                    <td>@Attributes.SibiAttributes[item.NewItemValues.ChangeType]</td>
+                                    <td>@Attributes.GetSibiAttribute(item.NewItemValues.ChangeType)</td>
                                     <td>@item.NewItemValues.Description</td>
                                     <td>@item.NewItemValues.User</td>
                                     <td>@item.NewItemValues.Qty</td>
-                                    <td>@Attributes.SibiAttributes[item.NewItemValues.Location]</td>
+                                    <td>@Attributes.GetSibiAttribute(item.NewItemValues.Location)</td>
                                     <td>@item.NewItemValues.ReplaceAsset</td>
                                     <td>@item.NewItemValues.ReplaceSerial</td>
                                     <td>@item.NewItemValues.OrgCode</td>
@@ -163,11 +163,11 @@
                             @foreach (var item in Model.ApprovalItems)
                             {
                                 <tr style="background-color:lightgray">
-                                    <td>@Attributes.SibiAttributes[item.OldItemValues.ChangeType]</td>
+                                    <td>@Attributes.GetSibiAttribute(item.OldItemValues.ChangeType)</td>
                                     <td>@item.OldItemValues.Description</td>
                                     <td>@item.OldItemValues.User</td>
                                     <td>@item.OldItemValues.Qty</td>
-                                    <td>@Attributes.SibiAttributes[item.OldItemValues.Location]</td>
+                                    <td>@Attributes.GetSibiAttribute(item.OldItemValues.Location)</td>
                                     <td>@item.OldItemValues.ReplaceAsset</td>
                                     <td>@item.OldItemValues.ReplaceSerial</td>
                                     <td>@item.OldItemValues.OrgCode</td>
@@ -182,7 +182,7 @@
                 @Html.HiddenFor(m => m.GUID)
                 @Html.HiddenFor(m => m.PostSuccess)
             </div>
-          
+
 
 
             <fieldset id="response_controls">
@@ -200,10 +200,10 @@
                     <button id="btnAjaxReject" class="btn btn-primary btn-lg" style="background-color:#ffb2b2;color:#565656" type="button">Reject</button>
                 </div>
             </fieldset>
-          
+
 
         </form>
-     
+
 
 
     </div><!-- /container -->
