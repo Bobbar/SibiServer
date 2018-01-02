@@ -10,6 +10,7 @@ namespace SibiServer
 {
     public class SibiController : Controller
     {
+       
         // GET: /<controller>/
         public IActionResult Index(string userid)
         {
@@ -25,10 +26,13 @@ namespace SibiServer
 
             return View();
         }
-        // [HttpGet]
+        [HttpGet]
         public IActionResult Approval(string id)
         {
 
+
+          
+            
 
             ViewData["id"] = id;
             ViewData["state"] = "prepost";
@@ -41,35 +45,35 @@ namespace SibiServer
             return View(approval);
         }
 
-        [HttpPost]
-        public ActionResult Approval(Models.RequestApproval r)
-        {
+        //[HttpPost]
+        //public ActionResult Approval(Models.RequestApproval r)
+        //{
 
-            var response = r.ApprovalResponse;
-            Console.WriteLine("Approve CLicked!  " + response);
-            ViewData["state"] = "posted";
-            ViewData["response"] = response;
-            //  ViewBag.Approval = r;
-
-
-            if (response == "accept")
-            {
-                DBFunctions.PopApprovalData(ref r);
-                bool success = DBFunctions.ApproveRequest(r);//sqlContext.ApproveRequest(r.GUID);
-                r.PostSuccess = success;
-                return View(r);
-            }
-            else if (response == "reject")
-            {
-                DBFunctions.PopApprovalData(ref r);
-                bool success = DBFunctions.RejectRequest(r);//sqlContext.ApproveRequest(r.GUID);
-                r.PostSuccess = success;
-                return View(r);
-            }
-            return View(r);
+        //    var response = r.ApprovalResponse;
+        //    Console.WriteLine("Approve CLicked!  " + response);
+        //    ViewData["state"] = "posted";
+        //    ViewData["response"] = response;
+        //    //  ViewBag.Approval = r;
 
 
-        }
+        //    if (response == "accept")
+        //    {
+        //        DBFunctions.PopApprovalData(ref r);
+        //        bool success = DBFunctions.ApproveRequest(r);//sqlContext.ApproveRequest(r.GUID);
+        //        r.PostSuccess = success;
+        //        return View(r);
+        //    }
+        //    else if (response == "reject")
+        //    {
+        //        DBFunctions.PopApprovalData(ref r);
+        //        bool success = DBFunctions.RejectRequest(r);//sqlContext.ApproveRequest(r.GUID);
+        //        r.PostSuccess = success;
+        //        return View(r);
+        //    }
+        //    return View(r);
+
+
+        //}
 
         [HttpPost]
         public IActionResult Approve([FromBody] Models.RequestApproval r)

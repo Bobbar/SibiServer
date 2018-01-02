@@ -14,7 +14,7 @@ namespace SibiServer
     {
         public static void Main(string[] args)
         {
-           // Emailer.DBPoller.StartPoller();
+            Emailer.DBPoller.StartPoller();
             Attributes.PopulateAttributes();
 
             BuildWebHost(args).Run();

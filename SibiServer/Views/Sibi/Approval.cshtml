@@ -124,19 +124,19 @@
                         </thead>
                         <tbody style="color:black">
                             @foreach (var item in Model.ApprovalItems)
-                {
-                    <tr style="background-color:lightgray">
-                        <td>@Attributes.SibiAttributes[item.NewItemValues.ChangeType]</td>
-                        <td>@item.NewItemValues.Description</td>
-                        <td>@item.NewItemValues.User</td>
-                        <td>@item.NewItemValues.Qty</td>
-                        <td>@Attributes.SibiAttributes[item.NewItemValues.Location]</td>
-                        <td>@item.NewItemValues.ReplaceAsset</td>
-                        <td>@item.NewItemValues.ReplaceSerial</td>
-                        <td>@item.NewItemValues.OrgCode</td>
-                        <td>@item.NewItemValues.ObjCode</td>
-                    </tr>
-    }
+                            {
+                                <tr style="background-color:lightgray">
+                                    <td>@Attributes.SibiAttributes[item.NewItemValues.ChangeType]</td>
+                                    <td>@item.NewItemValues.Description</td>
+                                    <td>@item.NewItemValues.User</td>
+                                    <td>@item.NewItemValues.Qty</td>
+                                    <td>@Attributes.SibiAttributes[item.NewItemValues.Location]</td>
+                                    <td>@item.NewItemValues.ReplaceAsset</td>
+                                    <td>@item.NewItemValues.ReplaceSerial</td>
+                                    <td>@item.NewItemValues.OrgCode</td>
+                                    <td>@item.NewItemValues.ObjCode</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </a>
@@ -161,30 +161,28 @@
                         </thead>
                         <tbody style="color:black">
                             @foreach (var item in Model.ApprovalItems)
-                {
-                    <tr style="background-color:lightgray">
-                        <td>@Attributes.SibiAttributes[item.OldItemValues.ChangeType]</td>
-                        <td>@item.OldItemValues.Description</td>
-                        <td>@item.OldItemValues.User</td>
-                        <td>@item.OldItemValues.Qty</td>
-                        <td>@Attributes.SibiAttributes[item.OldItemValues.Location]</td>
-                        <td>@item.OldItemValues.ReplaceAsset</td>
-                        <td>@item.OldItemValues.ReplaceSerial</td>
-                        <td>@item.OldItemValues.OrgCode</td>
-                        <td>@item.OldItemValues.ObjCode</td>
-                    </tr>
-    }
+                            {
+                                <tr style="background-color:lightgray">
+                                    <td>@Attributes.SibiAttributes[item.OldItemValues.ChangeType]</td>
+                                    <td>@item.OldItemValues.Description</td>
+                                    <td>@item.OldItemValues.User</td>
+                                    <td>@item.OldItemValues.Qty</td>
+                                    <td>@Attributes.SibiAttributes[item.OldItemValues.Location]</td>
+                                    <td>@item.OldItemValues.ReplaceAsset</td>
+                                    <td>@item.OldItemValues.ReplaceSerial</td>
+                                    <td>@item.OldItemValues.OrgCode</td>
+                                    <td>@item.OldItemValues.ObjCode</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
 
                 </a>
-               
+
                 @Html.HiddenFor(m => m.GUID)
                 @Html.HiddenFor(m => m.PostSuccess)
             </div>
-            @*</div>*@
-
-            @*<form class="form-inline">*@
+          
 
 
             <fieldset id="response_controls">
@@ -202,29 +200,10 @@
                     <button id="btnAjaxReject" class="btn btn-primary btn-lg" style="background-color:#ffb2b2;color:#565656" type="button">Reject</button>
                 </div>
             </fieldset>
-            @*</form>*@
+          
 
         </form>
-        <section>
-            <p>
-                <label id="lblStatus" style="color:black"></label>
-            </p>
-
-        </section>
-        @*}*@
-
-
-
-
-
-
-
-        @*<input id="btnAjaxSubmit" class="btn btn-primary btn-lg" type="submit" name="response" value="accept" />
-            <input id="btnAjaxReject" class="btn btn-primary btn-lg" type="submit" name="response" value="reject" />*@
-
-
-
-
+     
 
 
     </div><!-- /container -->
@@ -351,98 +330,14 @@
     </script>
 
 
-    <script src="~/js/classie.js"></script>
-    <script>
-
-
-
-        function setstate(suc, btn) {
-            var self = this, activatedClass = 'btn-activated';
-
-
-            if (suc) {
-                // btn.textContent = "SUCCESS!";
-
-                //activatedClass = 'btn-success3d';
-                //console.log(btn);
-                //if (!classie.has(btn, activatedClass)) {
-                //    //classie.add(btn, activatedClass);
-                //    setTimeout(function () {
-                //        classie.add(btn, activatedClass);
-                //    }, 250);
-                //    //setTimeout(function () {
-                //    //    btn.textContent = "SUCCESS!";
-                //    //    classie.remove(btn, activatedClass);
-                //    //}, 2000);
-
-                //}
-            }
-            else {
-                document.getElementById('lblStatus').textContent = "Result: ERROR";
-                // btn.textContent = "ERROR!";
-                // btn.getElementById.style.backgroundColor = '#ff6868';
-                //activatedClass = "btn-error3d";
-                //if (!classie.has(btn, activatedClass)) {
-                //    //classie.add(btn, activatedClass);
-                //    setTimeout(function () {
-                //        classie.add(btn, activatedClass);
-                //    }, 250);
-                //    //setTimeout(function () {
-                //    //    btn.textContent = "ERROR!";
-                //    //    classie.remove(btn, activatedClass);
-                //    //}, 2000);
-                //    document.getElementById('lblStatus').textContent = "Result: ERROR"
-                //}
-
-            }
-        }
-
-    </script>
-
     <script> console.log('@ViewData["state"].ToString()');</script>
 
-    @if (ViewData["state"].ToString() == "posted")
+    @if (Model.ApprovalStatus != ApprovalStatus.pending.ToString())
     {
         <script>document.getElementById('response_controls').disabled = true;</script>
-        @if (ViewData["response"].ToString() == "accept")
-        {
-
-            <script>
-                var btn = document.getElementById('btnApprove')
-                //document.getElementById('btnReject').style.display = 'none';
-                document.getElementById('lblStatus').textContent = "Result: Accepted"
-            </script>
-
-        }
-        else if (ViewData["response"].ToString() == "reject")
-        {
-
-            <script>
-                var btn = document.getElementById('btnReject')
-                //  document.getElementById('btnApprove').style.display = 'none';
-                document.getElementById('lblStatus').textContent = "Result: Rejected"
-            </script>
-        }
 
 
-        @if (Model.PostSuccess)
-        {
 
-
-            <script>
-                // var btn = document.getElementById('btnApprove')
-                setstate(true, btn);
-            </script>
-
-        }
-        else
-        {
-
-            <script>
-                // var btn = document.getElementById('btnApprove')
-                setstate(false, btn);
-            </script>
-        }
     }
     else
     {

@@ -30,6 +30,7 @@ namespace SibiServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSession();
             //services.Add(new ServiceDescriptor(typeof(MySQLComms), new MySQLComms(Configuration.GetConnectionString("DefaultConnection"))));
             // services.Add(new ServiceDescriptor(typeof(MySQLCommsOLD), new MySQLCommsOLD(connString)));
         }
@@ -42,6 +43,8 @@ namespace SibiServer
                 app.UseDeveloperExceptionPage();
             }
             app.UseStaticFiles();
+            app.UseSession();
+
 
             app.UseMvc(routes =>
             {
